@@ -28,7 +28,10 @@ Output: <9:16 | 4:5 | 1:1 | 16:9>, ~<N>s, platform <Meta Reels>
 Goal/hook: <...>   Offer/CTA: <...>
 Script (optional): <paste or file>
 Language: <English | Tamil | Tanglish>
-Style: <preset or reference name, or "brand default">
+Style: <style id from styles/ | "a+b" (primary + accent) | path to a reference video I like | a few words (e.g. "fast, yellow cards, collage") | "auto">
+Colour: <fix cast / keep the room look / match reference / leave as is>
+Placement: <organic Reels | paid Meta ad>   (paid = stricter safe zone)
 Mode: autopilot
+(Anything I say to change in review is remembered per client/style: I should not have to repeat it.)
 Deliver the final mp4 + a short report (confidence, flagged spots).
 ```

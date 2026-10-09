@@ -1,0 +1,116 @@
+{
+  "id": "gel-lit-ad-education",
+  "name": "Gel-lit room + scene-integrated type",
+  "family": "A",
+  "description": "Talking head in a coloured-light room; type that lives in the scene (rotated 'BRO' on the desk, stacked headline top-left), count-up numbers, screen-recording cards with green glow highlights.",
+  "use_when": [
+    "tanglish",
+    "ads",
+    "meta ads",
+    "agency",
+    "story",
+    "numbers",
+    "money",
+    "screen-recording",
+    "dashboard",
+    "gel",
+    "dark",
+    "60-90s"
+  ],
+  "source_refs": [
+    "Video-54546",
+    "Video-67670"
+  ],
+  "presets": [
+    "word-pop-caption",
+    "scene-integrated-3d-text",
+    "count-up-stat",
+    "screen-rec-highlight",
+    "rounded-card-float",
+    "speed-lines-callout",
+    "cut-rhythm-ad-reel"
+  ],
+  "assets": {
+    "categories": [
+      "Glow FX",
+      "10 Speed Lines Anime Backgrounds",
+      "Circles, Squares, and Lines",
+      "IG Animations",
+      "Overlays"
+    ],
+    "searches": [
+      {
+        "kind": "assets",
+        "q": "glow burst",
+        "category": "Glow FX"
+      },
+      {
+        "kind": "assets",
+        "q": "speed lines",
+        "category": "Speed Lines"
+      },
+      {
+        "kind": "assets",
+        "q": "line circle square callout",
+        "category": "Circles"
+      }
+    ]
+  },
+  "captions": {
+    "preset": "word-pop-caption",
+    "max_words": 2,
+    "case": "upper",
+    "tanglish_subword": true,
+    "y_pct": [
+      26,
+      40
+    ]
+  },
+  "rhythm": {
+    "avg_shot_s": [
+      2.0,
+      3.0
+    ],
+    "change_every_s": [
+      1.2,
+      2.0
+    ],
+    "max_unbroken_face_s": 6
+  },
+  "colour": {
+    "palette": [
+      "#0B0A0B",
+      "#7A2FD0",
+      "#FF2D55",
+      "#00D26A",
+      "#FFFFFF"
+    ],
+    "look": "keep the gel colours as the look, protect skin",
+    "lut_hint": "none or very light; do NOT neutralise the gel cast",
+    "grade": "match shots to each other, lift shadows slightly"
+  },
+  "fonts": {
+    "heading": "heavy condensed sans with metallic gradient fill"
+  },
+  "sfx": {
+    "density_per_s": 0.8,
+    "classes": [
+      "hit",
+      "whoosh",
+      "pop",
+      "glitch"
+    ]
+  },
+  "music": {
+    "energy": "mid-high",
+    "duck_db": -16
+  },
+  "dos": [
+    "text interacts with the set",
+    "green glow on the thing being discussed"
+  ],
+  "donts": [
+    "no flat full-screen white UI without a card"
+  ],
+  "status": "draft-from-references"
+}

@@ -71,6 +71,33 @@ def load_config():
     return cfg
 
 
+def enable_cuda_dlls():
+    """Windows: make pip-installed CUDA runtime DLLs (nvidia-cublas-cu12, nvidia-cudnn-cu12) loadable by
+    ctranslate2/faster-whisper. No-op elsewhere or if the packages are absent."""
+    import os
+    import site
+    if os.name != "nt":
+        return
+    for base in list(site.getsitepackages()) + [site.getusersitepackages()]:
+        nv = Path(base) / "nvidia"
+        if nv.is_dir():
+            for b in nv.glob("*/bin"):
+                try:
+                    os.add_dll_directory(str(b))
+                except (OSError, AttributeError):
+                    pass
+                os.environ["PATH"] = str(b) + os.pathsep + os.environ.get("PATH", "")
+
+
+def cuda_available():
+    enable_cuda_dlls()
+    try:
+        import ctranslate2  # type: ignore
+        return ctranslate2.get_cuda_device_count() > 0
+    except Exception:  # noqa: BLE001
+        return False
+
+
 # ---------------------------------------------------------------- processes
 def have(binary):
     return shutil.which(binary) is not None

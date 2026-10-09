@@ -28,3 +28,13 @@ references/analysis/assets-test*
 references/analysis/*.transcript.json
 references/catalog.json
 references/REPORT.md
+
+# job outputs and remaining derived references
+jobs/
+references/analysis/
+references/sorted/
+references/inbox/
+
+# the user's OWN reels, stored through Git LFS
+!own-reels/
+!own-reels/*.mp4

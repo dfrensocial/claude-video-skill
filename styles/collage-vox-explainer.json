@@ -1,0 +1,114 @@
+{
+  "id": "collage-vox-explainer",
+  "name": "Paper collage / Vox-style explainer",
+  "family": "B",
+  "description": "Paper cut-outs, stamps and halftone people on textured plates; yellow torn-paper label words; map and newspaper plates; stacked layout with the speaker under the collage.",
+  "use_when": [
+    "english",
+    "explainer",
+    "documentary",
+    "history",
+    "collage",
+    "paper",
+    "vox",
+    "story",
+    "map",
+    "editorial",
+    "30-60s"
+  ],
+  "source_refs": [
+    "Video-93227",
+    "Video-84658",
+    "Video-95528"
+  ],
+  "presets": [
+    "torn-paper-label",
+    "kinetic-emphasis",
+    "flash-transition",
+    "word-pop-caption",
+    "cut-rhythm-fast"
+  ],
+  "assets": {
+    "categories": [
+      "Paper effects",
+      "PNGs",
+      "Back grounds",
+      "Film Burn Transitions",
+      "Overlays"
+    ],
+    "searches": [
+      {
+        "kind": "assets",
+        "q": "paper letters",
+        "category": "Paper effects"
+      },
+      {
+        "kind": "assets",
+        "q": "paper cut green screen",
+        "category": "Paper effects"
+      },
+      {
+        "kind": "assets",
+        "q": "grain film",
+        "category": "Overlays"
+      }
+    ]
+  },
+  "captions": {
+    "preset": "word-pop-caption",
+    "max_words": 3,
+    "case": "upper",
+    "tanglish_subword": false,
+    "y_pct": [
+      60,
+      66
+    ],
+    "box": true
+  },
+  "rhythm": {
+    "avg_shot_s": [
+      1.8,
+      2.8
+    ],
+    "change_every_s": [
+      1.0,
+      2.0
+    ],
+    "max_unbroken_face_s": 6
+  },
+  "colour": {
+    "palette": [
+      "#EDE6D6",
+      "#F2C200",
+      "#B3202A",
+      "#111111"
+    ],
+    "look": "warm paper, grain, slightly faded",
+    "lut_hint": "warm film LUT, test PGS_Film 01-05 + grain overlay",
+    "grade": "lift blacks, warm mids"
+  },
+  "fonts": {
+    "heading": "slab / editorial serif bold",
+    "accent": "monospaced for boxed captions"
+  },
+  "sfx": {
+    "density_per_s": 0.7,
+    "classes": [
+      "paper rip",
+      "stamp",
+      "whoosh"
+    ]
+  },
+  "music": {
+    "energy": "medium, documentary",
+    "duck_db": -16
+  },
+  "dos": [
+    "jitter 8-12 fps on cut-outs",
+    "texture under every collage"
+  ],
+  "donts": [
+    "no clean vector look in this style"
+  ],
+  "status": "draft-from-references"
+}

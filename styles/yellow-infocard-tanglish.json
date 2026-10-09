@@ -1,0 +1,118 @@
+{
+  "id": "yellow-infocard-tanglish",
+  "name": "Yellow info-card (Tanglish education reel)",
+  "family": "A",
+  "description": "Face-to-camera reel that cuts away to designed yellow info cards (stats, comparisons, pillars) with 1-2 word pop captions and a big key word + tiny Tamil sub-word. AI/3D B-roll in rounded phone cards, whip transitions.",
+  "use_when": [
+    "tanglish",
+    "tamil",
+    "education",
+    "explainer",
+    "business",
+    "d2c",
+    "ecommerce",
+    "stats",
+    "comparison",
+    "yellow",
+    "30-60s",
+    "talking-head"
+  ],
+  "source_refs": [
+    "Video-86635",
+    "Video-5612"
+  ],
+  "presets": [
+    "word-pop-caption",
+    "info-card-yellow",
+    "rounded-card-float",
+    "whip-blur-transition",
+    "count-up-stat",
+    "cut-rhythm-ad-reel"
+  ],
+  "assets": {
+    "categories": [
+      "Back grounds",
+      "Motion Backgrounds",
+      "IG Animations",
+      "Money Animation",
+      "PNGs",
+      "Emojis"
+    ],
+    "searches": [
+      {
+        "kind": "assets",
+        "q": "background yellow stripes",
+        "category": "Back grounds"
+      },
+      {
+        "kind": "assets",
+        "q": "money cash dollar",
+        "category": "Money Animation"
+      },
+      {
+        "kind": "assets",
+        "q": "like comment follow heart save",
+        "category": "IG Animations"
+      }
+    ]
+  },
+  "captions": {
+    "preset": "word-pop-caption",
+    "max_words": 2,
+    "case": "normal",
+    "tanglish_subword": true,
+    "y_pct": [
+      28,
+      45
+    ]
+  },
+  "rhythm": {
+    "avg_shot_s": [
+      1.8,
+      2.8
+    ],
+    "change_every_s": [
+      1.5,
+      2.5
+    ],
+    "max_unbroken_face_s": 8
+  },
+  "colour": {
+    "palette": [
+      "#E8AA05",
+      "#0B0A0B",
+      "#FFFFFF",
+      "#C8171E"
+    ],
+    "look": "natural skin, warm; yellow plates for cards",
+    "lut_hint": "light film LUT from PGS_Film (Standard) set, test 01-05",
+    "grade": "primary correct, then slight warm push"
+  },
+  "fonts": {
+    "heading": "heavy sans (Montserrat Black / Poppins ExtraBold as stand-ins)",
+    "accent": "same family, red emphasis"
+  },
+  "sfx": {
+    "density_per_s": 0.5,
+    "classes": [
+      "pop",
+      "whoosh",
+      "ding",
+      "riser"
+    ]
+  },
+  "music": {
+    "energy": "medium, steady",
+    "duck_db": -14
+  },
+  "dos": [
+    "one idea per card",
+    "numbers only from the brief",
+    "alternate face / card / face"
+  ],
+  "donts": [
+    "never invent statistics",
+    "no more than 2 fonts"
+  ],
+  "status": "draft-from-references"
+}

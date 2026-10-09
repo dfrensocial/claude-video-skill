@@ -21,5 +21,10 @@ Two routes. Prefer the MCP for exploratory/creative operations; use `scripts/res
 7. Render: `resolve_build.py render` (H.264 MP4). Preview renders at half resolution are fine for QC frames.
 8. If Resolve is not running or scripting is blocked: say exactly which step failed and fall back to the EDL (`cut.edl`) + ffmpeg preview so work is not lost.
 
+## Connection facts (verified against the local README, Resolve 21.0.3.7 on this PC; see also editing-knowledge.md section 4)
+- Windows env (README): `RESOLVE_SCRIPT_API=%PROGRAMDATA%\Blackmagic Design\DaVinci Resolve\Support\Developer\Scripting`, `RESOLVE_SCRIPT_LIB=C:\Program Files\Blackmagic Design\DaVinci Resolve\fusionscript.dll`, `PYTHONPATH` += `%RESOLVE_SCRIPT_API%\Modules\`. Resolve must be running and **Preferences > System > General > External scripting using = Local**.
+- Studio vs Free: external scripting needs **Studio**. Resolve 21.1 (Sept 2026) also made scripting Studio-only and added a native MCP (File > Setup AI Assistants); this PC has 21.0.3.7, so use `resolve_build.py` (Route A) or the community MCP. Run only one MCP.
+- API details used by this skill: node indexes are 1-based; `SetCDL` takes STRING values (`{"NodeIndex":"1","Slope":"r g b","Offset":"r g b","Power":"r g b","Saturation":"s"}`); `SetLUT(node, path)` only works on LUTs Resolve already discovered, so copy the .cube into Resolve's LUT folder and call `Project.RefreshLUTList()` first; use INTEGER frames in `AppendToTimeline` (fractional values silently return nothing: check the returned list length).
+
 ## Known unknowns (verify on first live run, record outcome in CLAUDE.md)
 inclusive vs exclusive `endFrame`; whether AppendToTimeline `recordFrame` honours gaps on your version; Text+ preset import path; Fusion setting application via script; audio gain via script (we pre-gain with ffmpeg instead).

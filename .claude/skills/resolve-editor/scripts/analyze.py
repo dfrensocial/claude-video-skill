@@ -21,7 +21,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from common import have, load_config, probe_summary, run, save_json  # noqa: E402
+from common import (cuda_available, enable_cuda_dlls, have, load_config, probe_summary, run,  # noqa: E402
+                    save_json)
 
 VERBATIM_PROMPT = ("Umm, let me think, like, hmm... Okay, so, uh, I- I was, you know, going to say, "
                    "uh, the the thing is, actually, yeah.")
@@ -81,15 +82,42 @@ def transcript_quality(t):
         best = max(best, run)
     ratio = round(low / n, 2) if n else 1.0
     unreliable = n == 0 or ratio > 0.25 or best >= 4
+    # per-segment trust: a clip can be fine in clean speech and garbage under music / a second voice
+    bad_ranges = []
+    for s in t.get("segments", []):
+        ws = [w for w in words if s["start"] - 0.05 <= w["start"] <= s["end"] + 0.05]
+        if ws and sum(1 for w in ws if w.get("p", 1.0) < 0.5) / len(ws) > 0.4:
+            bad_ranges.append([s["start"], s["end"]])
     note = ("OK for word-level cuts" if not unreliable else
             "UNRELIABLE: do not cut or caption from these words. Ask for the script/SRT, use a larger model or "
             "--lang en/ta explicitly (editorial-craft.md), and fall back to silence-based cutting.")
-    return {"words": n, "low_conf_ratio": ratio, "max_repeat_run": best, "unreliable": unreliable, "note": note}
+    return {"words": n, "low_conf_ratio": ratio, "max_repeat_run": best, "unreliable": unreliable, "note": note,
+            "unreliable_ranges": bad_ranges}
+
+
+TAMIL_PROFILE = {"lang": "ta", "model": "large-v3", "verbatim": False}
 
 
 def transcribe(path, lang="auto", model="small", device="auto", verbatim=True):
+    """Transcribe; Tamil/Tanglish gets its own profile.
+
+    Measured here (RTX 5070, Video-5612): large-v3 + --lang ta + NO English verbatim prompt = 11 s, 6 % low-confidence;
+    the English 'uh, you know' verbatim prompt makes Whisper echo the prompt on Tamil audio, small+auto loops, and
+    medium on CPU needs 150-215 s. So: `--lang tanglish` = that profile; and if an `auto` run detects Tamil and
+    comes back unreliable, it is re-run automatically with the profile (needs CUDA for sane speed; on CPU it warns)."""
+    if lang in ("tanglish", "ta-profile"):
+        lang, model, verbatim = TAMIL_PROFILE["lang"], TAMIL_PROFILE["model"], TAMIL_PROFILE["verbatim"]
+    elif lang == "ta":
+        verbatim = False
     t = _transcribe(path, lang, model, device, verbatim)
     t["quality"] = transcript_quality(t)
+    if (t.get("language") == "ta" and t["quality"]["unreliable"] and model != TAMIL_PROFILE["model"]
+            and (device == "cuda" or (device == "auto" and cuda_available()))):
+        print("[INFO] Tamil detected and first pass unreliable: re-running with large-v3 + ta + no verbatim prompt",
+              file=sys.stderr)
+        t = _transcribe(path, TAMIL_PROFILE["lang"], TAMIL_PROFILE["model"], device, TAMIL_PROFILE["verbatim"])
+        t["quality"] = transcript_quality(t)
+        t["profile"] = "tamil-auto-rerun"
     if t["quality"]["unreliable"]:
         print(f"[WARN] transcript quality: {t['quality']['note']} "
               f"(low-conf {t['quality']['low_conf_ratio']}, repeat run {t['quality']['max_repeat_run']})", file=sys.stderr)
@@ -105,11 +133,9 @@ def _transcribe(path, lang="auto", model="small", device="auto", verbatim=True):
     if WhisperModel is not None:
         dev = device
         if dev == "auto":
-            try:
-                import torch  # type: ignore
-                dev = "cuda" if torch.cuda.is_available() else "cpu"
-            except Exception:  # noqa: BLE001
-                dev = "cpu"
+            dev = "cuda" if cuda_available() else "cpu"
+        elif dev == "cuda":
+            enable_cuda_dlls()
         m = WhisperModel(model, device=dev, compute_type="float16" if dev == "cuda" else "int8")
         segs, info = m.transcribe(str(path), language=None if lang == "auto" else lang, word_timestamps=True,
                                   vad_filter=True, beam_size=5, condition_on_previous_text=False,

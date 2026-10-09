@@ -1,0 +1,102 @@
+{
+  "id": "fast-promo-flash",
+  "name": "Fast promo with flash reveals",
+  "family": "B",
+  "description": "0.5 s average shots, light-burst flash into logo reveals, UI toggle graphics, stylised or AI footage, bold lime/yellow captions.",
+  "use_when": [
+    "promo",
+    "launch",
+    "product",
+    "announcement",
+    "fast",
+    "ai",
+    "app",
+    "hype",
+    "15-30s",
+    "english"
+  ],
+  "source_refs": [
+    "Video-44049"
+  ],
+  "presets": [
+    "flash-transition",
+    "glitch-mosaic-reveal",
+    "word-pop-caption",
+    "cut-rhythm-fast"
+  ],
+  "assets": {
+    "categories": [
+      "Film Burn Transitions",
+      "Glow FX",
+      "Green Screen",
+      "Overlays"
+    ],
+    "searches": [
+      {
+        "kind": "assets",
+        "q": "flash burn explosion",
+        "category": "Film Burn"
+      },
+      {
+        "kind": "assets",
+        "q": "explosion sparkle",
+        "category": "Green Screen"
+      }
+    ]
+  },
+  "captions": {
+    "preset": "word-pop-caption",
+    "max_words": 2,
+    "case": "upper",
+    "tanglish_subword": false,
+    "y_pct": [
+      60,
+      70
+    ]
+  },
+  "rhythm": {
+    "avg_shot_s": [
+      0.4,
+      1.0
+    ],
+    "change_every_s": [
+      0.4,
+      1.0
+    ],
+    "max_unbroken_face_s": 3
+  },
+  "colour": {
+    "palette": [
+      "#0B0A0B",
+      "#B8FF3B",
+      "#FF5A1F",
+      "#FFFFFF"
+    ],
+    "look": "punchy, saturated, high contrast",
+    "lut_hint": "contrast LUT",
+    "grade": "push saturation, protect skin"
+  },
+  "fonts": {
+    "heading": "extended heavy sans / italic"
+  },
+  "sfx": {
+    "density_per_s": 1.4,
+    "classes": [
+      "impact",
+      "whoosh",
+      "riser",
+      "glitch"
+    ]
+  },
+  "music": {
+    "energy": "very high",
+    "duck_db": -12
+  },
+  "dos": [
+    "flash on every scene change"
+  ],
+  "donts": [
+    "not for calm educational content"
+  ],
+  "status": "draft-from-references"
+}

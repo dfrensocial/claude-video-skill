@@ -2,7 +2,7 @@
 
 | Placement | Ratio | Size | Notes |
 |---|---|---|---|
-| Reels / Stories | 9:16 | 1080x1920 | **Measured from the studio's own overlay `assets/asserss/Safe Zone.png` (1080x1920):** top ~148 px blocked; bottom blocked from y~1522 (~398 px); right-hand button column blocked from x~927 for y 819-1920. **Safe text box: x 0-920, y 150-1520** (best: x 60-900, y 220-1450). Left edge is free. Prefer the studio overlay over generic numbers; re-measure if Meta changes the layout. |
+| Reels / Stories | 9:16 | 1080x1920 | **Measured from the studio's own overlay `assets/asserss/Safe Zone.png` (1080x1920):** top ~148 px blocked; bottom blocked from y~1522 (~398 px); right-hand button column blocked from x~927 for y 819-1920. **Safe text box: x 0-920, y 150-1520** (best: x 60-900, y 220-1450). Left edge is free. Prefer the studio overlay over generic numbers; re-measure if Meta changes the layout. **Paid placements: use the stricter box.** Meta's own Reels image-ad spec leaves ~14 % top, ~35 % bottom and ~6 % per side free (on 1080x1920: x 65-1015, y 270-1250; source: facebook.com/business/ads-guide/update/image/instagram-reels, researched in editing-knowledge.md; a video-specific figure could not be retrieved). Rule: organic Reels = studio box (y 150-1520); **paid Meta ads = Meta box (y 270-1250)** for hook text, captions and CTA unless the user says otherwise. |
 | Feed | 4:5 | 1080x1350 | |
 | Square | 1:1 | 1080x1080 | |
 | Landscape | 16:9 | 1920x1080 | |

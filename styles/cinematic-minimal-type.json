@@ -1,0 +1,99 @@
+{
+  "id": "cinematic-minimal-type",
+  "name": "Cinematic minimal type",
+  "family": "B",
+  "description": "Slow, spare: a small sentence between colour-burst reveals, silhouette fills, hand-drawn scribbles and ink drops. Few words, big feeling.",
+  "use_when": [
+    "english",
+    "brand",
+    "story",
+    "emotional",
+    "poem",
+    "cinematic",
+    "minimal",
+    "short",
+    "15-30s",
+    "launch"
+  ],
+  "source_refs": [
+    "Video-24447"
+  ],
+  "presets": [
+    "kinetic-emphasis",
+    "flash-transition",
+    "cut-rhythm-fast"
+  ],
+  "assets": {
+    "categories": [
+      "Glow FX",
+      "Film Burn Transitions",
+      "Motion Backgrounds"
+    ],
+    "searches": [
+      {
+        "kind": "assets",
+        "q": "glow",
+        "category": "Glow FX"
+      },
+      {
+        "kind": "assets",
+        "q": "ink drip",
+        "category": "Overlays"
+      }
+    ]
+  },
+  "captions": {
+    "preset": "kinetic-emphasis",
+    "max_words": 4,
+    "case": "lower",
+    "tanglish_subword": false,
+    "y_pct": [
+      45,
+      55
+    ]
+  },
+  "rhythm": {
+    "avg_shot_s": [
+      1.0,
+      2.0
+    ],
+    "change_every_s": [
+      1.0,
+      1.5
+    ],
+    "max_unbroken_face_s": 5
+  },
+  "colour": {
+    "palette": [
+      "#D4D1D5",
+      "#1B1518",
+      "#E8AA05",
+      "#E01E37"
+    ],
+    "look": "off-white/black with one burst colour per idea",
+    "lut_hint": "none",
+    "grade": "soft contrast"
+  },
+  "fonts": {
+    "heading": "light humanist sans, lowercase"
+  },
+  "sfx": {
+    "density_per_s": 0.4,
+    "classes": [
+      "swell",
+      "ink",
+      "soft hit"
+    ]
+  },
+  "music": {
+    "energy": "low, emotional",
+    "duck_db": -18
+  },
+  "dos": [
+    "leave breathing room"
+  ],
+  "donts": [
+    "no busy overlays"
+  ],
+  "status": "draft-from-references"
+}

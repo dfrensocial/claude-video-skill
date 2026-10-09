@@ -1,0 +1,107 @@
+{
+  "id": "kinetic-type-explainer",
+  "name": "Kinetic typography explainer",
+  "family": "B",
+  "description": "Words are the visuals: per-word entrances, huge keyword type behind/beside the subject, red emphasis, whole-scene colour switches on the beat, pixel/glitch reveals.",
+  "use_when": [
+    "english",
+    "explainer",
+    "tech",
+    "ai",
+    "fast",
+    "kinetic",
+    "typography",
+    "hook",
+    "30-60s",
+    "dark",
+    "cinematic"
+  ],
+  "source_refs": [
+    "Video-42028",
+    "Video-94468",
+    "Video-86514"
+  ],
+  "presets": [
+    "kinetic-emphasis",
+    "text-behind-subject",
+    "glitch-mosaic-reveal",
+    "word-pop-caption",
+    "cut-rhythm-fast"
+  ],
+  "assets": {
+    "categories": [
+      "Animated Letters Pack",
+      "Paper effects",
+      "Glow FX",
+      "Film Burn Transitions"
+    ],
+    "searches": [
+      {
+        "kind": "assets",
+        "q": "alphabet letters",
+        "category": "Animated Letters"
+      },
+      {
+        "kind": "assets",
+        "q": "flash burn",
+        "category": "Film Burn"
+      }
+    ]
+  },
+  "captions": {
+    "preset": "kinetic-emphasis",
+    "max_words": 3,
+    "case": "normal",
+    "tanglish_subword": false,
+    "y_pct": [
+      30,
+      55
+    ]
+  },
+  "rhythm": {
+    "avg_shot_s": [
+      0.5,
+      1.5
+    ],
+    "change_every_s": [
+      0.6,
+      1.4
+    ],
+    "max_unbroken_face_s": 4
+  },
+  "colour": {
+    "palette": [
+      "#0B0A0B",
+      "#C8171E",
+      "#FFFFFF",
+      "#1B4FE0"
+    ],
+    "look": "high contrast, one colour wash per scene",
+    "lut_hint": "contrast LUT, test PGS_Film 10-15",
+    "grade": "crush blacks slightly, saturated accent"
+  },
+  "fonts": {
+    "heading": "black-weight grotesque, condensed for giant words"
+  },
+  "sfx": {
+    "density_per_s": 1.0,
+    "classes": [
+      "hit",
+      "whoosh",
+      "glitch",
+      "riser"
+    ]
+  },
+  "music": {
+    "energy": "high",
+    "duck_db": -14
+  },
+  "dos": [
+    "never the same entrance twice in a row",
+    "connector words small, key words XL"
+  ],
+  "donts": [
+    "don't animate every word the same"
+  ],
+  "status": "draft-from-references"
+}

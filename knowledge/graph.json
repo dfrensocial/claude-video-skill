@@ -1,0 +1,1771 @@
+{
+  "version": 1,
+  "nodes": {
+    "preset:count-up-stat": {
+      "type": "preset",
+      "label": "count-up-stat",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T7": {
+      "type": "technique",
+      "label": "T7",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "reference:Video-54546": {
+      "type": "reference",
+      "label": "Video-54546",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "A"
+      }
+    },
+    "preset:cut-rhythm-ad-reel": {
+      "type": "preset",
+      "label": "cut-rhythm-ad-reel",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:rhythm": {
+      "type": "technique",
+      "label": "rhythm",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "reference:Video-86635": {
+      "type": "reference",
+      "label": "Video-86635",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "A"
+      }
+    },
+    "reference:Video-95528": {
+      "type": "reference",
+      "label": "Video-95528",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "reference:Video-93227": {
+      "type": "reference",
+      "label": "Video-93227",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "preset:cut-rhythm-fast": {
+      "type": "preset",
+      "label": "cut-rhythm-fast",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "reference:Video-44049": {
+      "type": "reference",
+      "label": "Video-44049",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "reference:Video-24447": {
+      "type": "reference",
+      "label": "Video-24447",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "reference:Video-94468": {
+      "type": "reference",
+      "label": "Video-94468",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "preset:flash-transition": {
+      "type": "preset",
+      "label": "flash-transition",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T11": {
+      "type": "technique",
+      "label": "T11",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:film-burn-transitions": {
+      "type": "asset_cat",
+      "label": "Film Burn Transitions",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:glow-fx": {
+      "type": "asset_cat",
+      "label": "Glow FX",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:glitch-mosaic-reveal": {
+      "type": "preset",
+      "label": "glitch-mosaic-reveal",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T12": {
+      "type": "technique",
+      "label": "T12",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "reference:Video-86514": {
+      "type": "reference",
+      "label": "Video-86514",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "preset:info-card-yellow": {
+      "type": "preset",
+      "label": "info-card-yellow",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T4": {
+      "type": "technique",
+      "label": "T4",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:kinetic-emphasis": {
+      "type": "preset",
+      "label": "kinetic-emphasis",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T2": {
+      "type": "technique",
+      "label": "T2",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:animated-letters-pack": {
+      "type": "asset_cat",
+      "label": "Animated Letters Pack",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:paper-effects": {
+      "type": "asset_cat",
+      "label": "Paper effects",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "reference:Video-42028": {
+      "type": "reference",
+      "label": "Video-42028",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "preset:rounded-card-float": {
+      "type": "preset",
+      "label": "rounded-card-float",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T5": {
+      "type": "technique",
+      "label": "T5",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "reference:Video-67670": {
+      "type": "reference",
+      "label": "Video-67670",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "A"
+      }
+    },
+    "reference:Video-5612": {
+      "type": "reference",
+      "label": "Video-5612",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "A"
+      }
+    },
+    "preset:scene-integrated-3d-text": {
+      "type": "preset",
+      "label": "scene-integrated-3d-text",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T8": {
+      "type": "technique",
+      "label": "T8",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:screen-rec-highlight": {
+      "type": "preset",
+      "label": "screen-rec-highlight",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T9": {
+      "type": "technique",
+      "label": "T9",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:speed-lines-callout": {
+      "type": "preset",
+      "label": "speed-lines-callout",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T6": {
+      "type": "technique",
+      "label": "T6",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:10-speed-lines-anime-backgrounds": {
+      "type": "asset_cat",
+      "label": "10 Speed Lines Anime Backgrounds",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:text-behind-subject": {
+      "type": "preset",
+      "label": "text-behind-subject",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T3": {
+      "type": "technique",
+      "label": "T3",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:torn-paper-label": {
+      "type": "preset",
+      "label": "torn-paper-label",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T10": {
+      "type": "technique",
+      "label": "T10",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:pngs": {
+      "type": "asset_cat",
+      "label": "PNGs",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "reference:Video-84658": {
+      "type": "reference",
+      "label": "Video-84658",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B"
+      }
+    },
+    "preset:whip-blur-transition": {
+      "type": "preset",
+      "label": "whip-blur-transition",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T13": {
+      "type": "technique",
+      "label": "T13",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "preset:word-pop-caption": {
+      "type": "preset",
+      "label": "word-pop-caption",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "kind": "parametric",
+        "confidence": "low"
+      }
+    },
+    "technique:T1": {
+      "type": "technique",
+      "label": "T1",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "technique:T14": {
+      "type": "technique",
+      "label": "T14",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "technique:T15": {
+      "type": "technique",
+      "label": "T15",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "style:cinematic-minimal-type": {
+      "type": "style",
+      "label": "Cinematic minimal type",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B",
+        "status": "draft-from-references"
+      }
+    },
+    "asset_cat:motion-backgrounds": {
+      "type": "asset_cat",
+      "label": "Motion Backgrounds",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "style:collage-vox-explainer": {
+      "type": "style",
+      "label": "Paper collage / Vox-style explainer",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B",
+        "status": "draft-from-references"
+      }
+    },
+    "asset_cat:back-grounds": {
+      "type": "asset_cat",
+      "label": "Back grounds",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:overlays": {
+      "type": "asset_cat",
+      "label": "Overlays",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "style:fast-promo-flash": {
+      "type": "style",
+      "label": "Fast promo with flash reveals",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B",
+        "status": "draft-from-references"
+      }
+    },
+    "asset_cat:green-screen": {
+      "type": "asset_cat",
+      "label": "Green Screen",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "style:gel-lit-ad-education": {
+      "type": "style",
+      "label": "Gel-lit room + scene-integrated type",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "A",
+        "status": "draft-from-references"
+      }
+    },
+    "asset_cat:circles-squares-and-lines": {
+      "type": "asset_cat",
+      "label": "Circles, Squares, and Lines",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:ig-animations": {
+      "type": "asset_cat",
+      "label": "IG Animations",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "style:kinetic-type-explainer": {
+      "type": "style",
+      "label": "Kinetic typography explainer",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "B",
+        "status": "draft-from-references"
+      }
+    },
+    "style:yellow-infocard-tanglish": {
+      "type": "style",
+      "label": "Yellow info-card (Tanglish education reel)",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {
+        "family": "A",
+        "status": "draft-from-references"
+      }
+    },
+    "asset_cat:money-animation": {
+      "type": "asset_cat",
+      "label": "Money Animation",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    },
+    "asset_cat:emojis": {
+      "type": "asset_cat",
+      "label": "Emojis",
+      "w": 1.0,
+      "uses": 0,
+      "created": "2026-10-09T09:19:25+00:00",
+      "updated": "2026-10-09T09:19:25+00:00",
+      "props": {}
+    }
+  },
+  "edges": {
+    "technique:T7|implemented_by|preset:count-up-stat": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:count-up-stat|seen_in|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:rhythm|implemented_by|preset:cut-rhythm-ad-reel": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-ad-reel|seen_in|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-ad-reel|seen_in|reference:Video-86635": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-ad-reel|seen_in|reference:Video-95528": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-ad-reel|seen_in|reference:Video-93227": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:rhythm|implemented_by|preset:cut-rhythm-fast": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-fast|seen_in|reference:Video-44049": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-fast|seen_in|reference:Video-24447": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:cut-rhythm-fast|seen_in|reference:Video-94468": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T11|implemented_by|preset:flash-transition": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:flash-transition|draws_on|asset_cat:film-burn-transitions": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:flash-transition|draws_on|asset_cat:glow-fx": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:flash-transition|seen_in|reference:Video-44049": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:flash-transition|seen_in|reference:Video-95528": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T12|implemented_by|preset:glitch-mosaic-reveal": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:glitch-mosaic-reveal|seen_in|reference:Video-86514": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:glitch-mosaic-reveal|seen_in|reference:Video-44049": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T4|implemented_by|preset:info-card-yellow": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:info-card-yellow|seen_in|reference:Video-86635": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T2|implemented_by|preset:kinetic-emphasis": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:kinetic-emphasis|draws_on|asset_cat:animated-letters-pack": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:kinetic-emphasis|draws_on|asset_cat:paper-effects": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:kinetic-emphasis|seen_in|reference:Video-42028": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:kinetic-emphasis|seen_in|reference:Video-95528": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:kinetic-emphasis|seen_in|reference:Video-86514": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T5|implemented_by|preset:rounded-card-float": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:rounded-card-float|seen_in|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:rounded-card-float|seen_in|reference:Video-67670": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:rounded-card-float|seen_in|reference:Video-5612": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T8|implemented_by|preset:scene-integrated-3d-text": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:scene-integrated-3d-text|seen_in|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T9|implemented_by|preset:screen-rec-highlight": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:screen-rec-highlight|seen_in|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:screen-rec-highlight|seen_in|reference:Video-5612": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:screen-rec-highlight|seen_in|reference:Video-93227": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T6|implemented_by|preset:speed-lines-callout": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:speed-lines-callout|draws_on|asset_cat:10-speed-lines-anime-backgrounds": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:speed-lines-callout|seen_in|reference:Video-67670": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T3|implemented_by|preset:text-behind-subject": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:text-behind-subject|seen_in|reference:Video-42028": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:text-behind-subject|seen_in|reference:Video-94468": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:text-behind-subject|seen_in|reference:Video-24447": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T10|implemented_by|preset:torn-paper-label": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:torn-paper-label|draws_on|asset_cat:paper-effects": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:torn-paper-label|draws_on|asset_cat:pngs": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:torn-paper-label|seen_in|reference:Video-95528": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:torn-paper-label|seen_in|reference:Video-84658": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:torn-paper-label|seen_in|reference:Video-93227": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T13|implemented_by|preset:whip-blur-transition": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:whip-blur-transition|seen_in|reference:Video-86635": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T1|implemented_by|preset:word-pop-caption": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:word-pop-caption|seen_in|reference:Video-86635": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:word-pop-caption|seen_in|reference:Video-5612": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "preset:word-pop-caption|seen_in|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-24447|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-24447|shows|technique:T2": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-24447|shows|technique:T3": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-24447|shows|technique:T10": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-24447|shows|technique:T12": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-42028|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-42028|shows|technique:T2": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-42028|shows|technique:T3": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-44049|shows|technique:T11": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-44049|shows|technique:T12": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-44049|shows|technique:T14": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-54546|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-54546|shows|technique:T5": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-54546|shows|technique:T7": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-54546|shows|technique:T8": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-54546|shows|technique:T9": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-5612|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-5612|shows|technique:T5": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-5612|shows|technique:T9": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-67670|shows|technique:T5": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-67670|shows|technique:T6": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-67670|shows|technique:T9": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-84658|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-84658|shows|technique:T4": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-84658|shows|technique:T10": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-84658|shows|technique:T14": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86514|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86514|shows|technique:T2": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86514|shows|technique:T12": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86514|shows|technique:T15": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86635|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86635|shows|technique:T4": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86635|shows|technique:T5": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86635|shows|technique:T13": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-86635|shows|technique:T14": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-93227|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-93227|shows|technique:T4": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-93227|shows|technique:T10": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-94468|shows|technique:T1": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-94468|shows|technique:T2": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-94468|shows|technique:T3": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-94468|shows|technique:T10": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-95528|shows|technique:T2": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-95528|shows|technique:T10": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "reference:Video-95528|shows|technique:T11": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "technique:T1|co_occurs|technique:T2": {
+      "w": 1.2,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T3": {
+      "w": 0.8999999999999999,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T10": {
+      "w": 1.2,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T12": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T2|co_occurs|technique:T3": {
+      "w": 0.8999999999999999,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T10|co_occurs|technique:T2": {
+      "w": 0.8999999999999999,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T12|co_occurs|technique:T2": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T10|co_occurs|technique:T3": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T5": {
+      "w": 0.8999999999999999,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T9": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T5|co_occurs|technique:T9": {
+      "w": 0.8999999999999999,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T4": {
+      "w": 0.8999999999999999,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T1|co_occurs|technique:T14": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T10|co_occurs|technique:T4": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "technique:T14|co_occurs|technique:T4": {
+      "w": 0.6,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": true
+    },
+    "style:cinematic-minimal-type|uses_preset|preset:kinetic-emphasis": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:cinematic-minimal-type|uses_preset|preset:flash-transition": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:cinematic-minimal-type|uses_preset|preset:cut-rhythm-fast": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:cinematic-minimal-type|learned_from|reference:Video-24447": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:cinematic-minimal-type|draws_on|asset_cat:glow-fx": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:cinematic-minimal-type|draws_on|asset_cat:film-burn-transitions": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:cinematic-minimal-type|draws_on|asset_cat:motion-backgrounds": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|uses_preset|preset:torn-paper-label": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|uses_preset|preset:kinetic-emphasis": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|uses_preset|preset:flash-transition": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|uses_preset|preset:word-pop-caption": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|uses_preset|preset:cut-rhythm-fast": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|learned_from|reference:Video-93227": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|learned_from|reference:Video-84658": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|learned_from|reference:Video-95528": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|draws_on|asset_cat:paper-effects": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|draws_on|asset_cat:pngs": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|draws_on|asset_cat:back-grounds": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|draws_on|asset_cat:film-burn-transitions": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:collage-vox-explainer|draws_on|asset_cat:overlays": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|uses_preset|preset:flash-transition": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|uses_preset|preset:glitch-mosaic-reveal": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|uses_preset|preset:word-pop-caption": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|uses_preset|preset:cut-rhythm-fast": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|learned_from|reference:Video-44049": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|draws_on|asset_cat:film-burn-transitions": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|draws_on|asset_cat:glow-fx": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|draws_on|asset_cat:green-screen": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:fast-promo-flash|draws_on|asset_cat:overlays": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:word-pop-caption": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:scene-integrated-3d-text": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:count-up-stat": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:screen-rec-highlight": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:rounded-card-float": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:speed-lines-callout": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|uses_preset|preset:cut-rhythm-ad-reel": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|learned_from|reference:Video-54546": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|learned_from|reference:Video-67670": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|draws_on|asset_cat:glow-fx": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|draws_on|asset_cat:10-speed-lines-anime-backgrounds": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|draws_on|asset_cat:circles-squares-and-lines": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|draws_on|asset_cat:ig-animations": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:gel-lit-ad-education|draws_on|asset_cat:overlays": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|uses_preset|preset:kinetic-emphasis": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|uses_preset|preset:text-behind-subject": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|uses_preset|preset:glitch-mosaic-reveal": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|uses_preset|preset:word-pop-caption": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|uses_preset|preset:cut-rhythm-fast": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|learned_from|reference:Video-42028": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|learned_from|reference:Video-94468": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|learned_from|reference:Video-86514": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|draws_on|asset_cat:animated-letters-pack": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|draws_on|asset_cat:paper-effects": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|draws_on|asset_cat:glow-fx": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:kinetic-type-explainer|draws_on|asset_cat:film-burn-transitions": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|uses_preset|preset:word-pop-caption": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|uses_preset|preset:info-card-yellow": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|uses_preset|preset:rounded-card-float": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|uses_preset|preset:whip-blur-transition": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|uses_preset|preset:count-up-stat": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|uses_preset|preset:cut-rhythm-ad-reel": {
+      "w": 1.5,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|learned_from|reference:Video-86635": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|learned_from|reference:Video-5612": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|draws_on|asset_cat:back-grounds": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|draws_on|asset_cat:motion-backgrounds": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|draws_on|asset_cat:ig-animations": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|draws_on|asset_cat:money-animation": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|draws_on|asset_cat:pngs": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    },
+    "style:yellow-infocard-tanglish|draws_on|asset_cat:emojis": {
+      "w": 1.0,
+      "n": 1,
+      "updated": "2026-10-09T09:19:25+00:00",
+      "auto": false
+    }
+  }
+}
