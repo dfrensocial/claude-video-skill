@@ -163,6 +163,13 @@ def main():
                 start = float(tr.get("start", t - (0.5 * dur if kind == "fire_wipe" else 0.28 * dur / 0.6)))
                 manifest["transitions"].append({"kind": kind, "file": str(f), "start": round(start, 3), "dur": round(dur + 0.05, 3), "t": t,
                                                 "note": tr.get("note", "")})
+            elif kind in ("burst", "slab"):
+                params = {k: v for k, v in tr.items() if k not in ("kind", "t", "note", "dur")}
+                f = A / "transitions" / f"{i + 1:02d}_{kind}_{t:06.2f}_{key(params)}.mov"
+                if a.force or not f.exists():
+                    graphics.render(kind, params, str(f), "mov", "looks")
+                length, cover = (1.6, 0.2) if kind == "burst" else (1.2, 0.34)   # file length, and when the frame is fully covered
+                manifest["transitions"].append({"kind": kind, "file": str(f), "start": round(t - cover, 3), "dur": length, "t": t, "note": tr.get("note", "")})
             elif kind == "flash":
                 f = A / "transitions" / f"{i + 1:02d}_flash_{t:06.2f}_{key(tr)}.mov"
                 if a.force or not f.exists():
@@ -200,10 +207,10 @@ def main():
         render_jobs += [(f"lane{ln}", evs) for ln, evs in sorted(groups.items())]
         for name, evs in render_jobs:
             lane_file = A / "typography" / f"_{name}_full.mov"
-            h = key(evs)
+            h = key([evs, ty.get("theme", "fire")])
             marker = A / "typography" / f"_{name}.hash"
             if a.force or not lane_file.exists() or not marker.exists() or marker.read_text() != h:
-                graphics.render("typo", {"events": json.dumps(evs, ensure_ascii=False)}, str(lane_file), "mov", "looks")
+                graphics.render("typo", {"events": json.dumps(evs, ensure_ascii=False), "theme": ty.get("theme", "fire")}, str(lane_file), "mov", "looks")
                 marker.write_text(h)
             if name == "hud":
                 e = evs[0]

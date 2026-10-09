@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"dir","type":"string","label":"right | left (sweep direction)","default":"right"},
+    {"id":"c1","type":"string","label":"leading slab colour","default":"#d4ff1f"},
+    {"id":"c2","type":"string","label":"trailing slab colour","default":"#ffffff"},
+    {"id":"c3","type":"string","label":"thin accent slab colour","default":"#111111"}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #root { position: relative; width: 100%; height: 100%; background: transparent; overflow: hidden; }
+      .slab { position: absolute; top: -700px; height: 3320px; transform-origin: 50% 50%; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="slab" data-start="0" data-duration="1.2" data-width="1080" data-height="1920">
+      <div class="clip" data-start="0" data-duration="1.2" data-track-index="0" style="position:absolute;inset:0">
+        <div class="slab" id="s3"></div><div class="slab" id="s2"></div><div class="slab" id="s1"></div>
+      </div>
+    </div>
+    <script>
+      // Diagonal slab wipe: three solid slabs (lead colour, white, ink) sweep across; the frame is fully covered around t = 0.34 s.
+      const V = window.__hyperframes.getVariables();
+      const sgn = V.dir === "left" ? -1 : 1;
+      const slabs = [
+        { id: "s1", w: 1500, color: V.c1, lag: 0.0 },
+        { id: "s2", w: 1300, color: V.c2, lag: 0.07 },
+        { id: "s3", w: 120, color: V.c3, lag: 0.16 },
+      ];
+      const tl = gsap.timeline({ paused: true });
+      slabs.forEach((s) => {
+        const el = document.getElementById(s.id);
+        el.style.width = s.w + "px"; el.style.background = s.color; el.style.left = (540 - s.w / 2) + "px";
+        const from = -sgn * (1080 / 2 + s.w / 2 + 700), to = sgn * (1080 / 2 + s.w / 2 + 700);
+        gsap.set(el, { x: from, rotate: sgn * -14 });
+        tl.to(el, { x: to, duration: 0.74, ease: "power2.inOut" }, s.lag);
+      });
+      window.__timelines["slab"] = tl;
+    </script>
+  </body>
+</html>

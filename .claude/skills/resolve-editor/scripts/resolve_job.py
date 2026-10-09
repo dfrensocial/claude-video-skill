@@ -29,8 +29,27 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from common import connect_resolve  # noqa: E402
+from common import connect_resolve as _connect  # noqa: E402
 import resolve_build as rb  # noqa: E402
+
+def connect_resolve():
+    """Connect to Resolve Studio; if it is not running, start it (it exits on its own now and then) and wait for scripting to answer."""
+    try:
+        return _connect()
+    except Exception:  # noqa: BLE001
+        exe = r"C:\Program Files\Blackmagic Design\DaVinci Resolve\Resolve.exe"
+        running = subprocess.run(["tasklist", "/FI", "IMAGENAME eq Resolve.exe"], capture_output=True, text=True).stdout
+        if "Resolve.exe" not in running and os.path.exists(exe):
+            subprocess.Popen([exe])
+        last = None
+        for _ in range(24):
+            time.sleep(10)
+            try:
+                return _connect()
+            except Exception as e:  # noqa: BLE001
+                last = e
+        raise SystemExit(f"Resolve did not come up: {last}")
+
 
 CAT_ORDER = ["cutaway", "glitch", "typography", "transition", "hud"]
 COLORS = {"typography": "Orange", "hud": "Yellow", "transition": "Red", "flash": "Red", "glitch": "Pink", "cutaway": "Blue", "sound": "Green"}

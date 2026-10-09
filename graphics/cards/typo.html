@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" data-resolution="portrait"
   data-composition-variables='[
-    {"id":"events","type":"string","label":"JSON array of typography events (see typo_events.md)","default":"[{\"type\":\"phrase\",\"t\":0.3,\"dur\":2,\"y\":30,\"lines\":[[{\"w\":\"HELLO\",\"s\":\"lg\"}]]}]"}
+    {"id":"events","type":"string","label":"JSON array of typography events (see typo_events.md)","default":"[{\"type\":\"phrase\",\"t\":0.3,\"dur\":2,\"y\":30,\"lines\":[[{\"w\":\"HELLO\",\"s\":\"lg\"}]]}]"},
+    {"id":"theme","type":"string","label":"fire (default) | lime (clean promo: heavy italic white + lime, pills, UI cards)","default":"fire"}
   ]'>
   <head>
     <meta charset="UTF-8" />
@@ -27,6 +28,20 @@
       .fire { color: transparent; background: linear-gradient(0deg, #ff2a00 0%, #ff6a00 32%, #ffb21e 62%, #fff0a8 100%); -webkit-background-clip: text; background-clip: text;
               -webkit-text-stroke: 0; text-shadow: none; }
       .strikeline { position: absolute; left: -6%; top: 52%; height: 0.11em; width: 0; background: #ff2b2b; transform: rotate(-4deg); transform-origin: left center; border-radius: 4px; box-shadow: 0 0 18px rgba(255,43,43,.9); }
+      /* ---- lime promo theme ---- */
+      body.lime .w { -webkit-text-stroke: 0; paint-order: normal; font-style: italic; text-shadow: 0 5px 0 rgba(0,0,0,.28), 0 0 34px rgba(0,0,0,.45); }
+      body.lime .f-black { letter-spacing: -0.035em; }
+      body.lime .c-a, body.lime .c-y { color: #d4ff1f; } body.lime .c-r { color: #ffffff; } body.lime .c-k { color: #101010; -webkit-text-stroke: 0; text-shadow: none; }
+      .pill { position: absolute; display: flex; align-items: center; gap: 26px; padding: 18px 40px 18px 22px; border-radius: 999px; background: #111; border: 4px solid #2a2a2a; opacity: 0; transform-origin: 50% 50%; }
+      .pill .sw { position: relative; width: 156px; height: 80px; border-radius: 999px; background: #3a3a3a; }
+      .pill .kn { position: absolute; left: 8px; top: 8px; width: 64px; height: 64px; border-radius: 50%; background: #fff; }
+      .pill .lb { font-family: "MontserratBlack", sans-serif; font-style: italic; font-size: 54px; letter-spacing: -0.01em; color: #fff; white-space: nowrap; }
+      .prompt { position: absolute; left: 60px; width: 840px; padding: 26px 26px 26px 36px; border-radius: 34px; background: #fff; display: flex; align-items: center; gap: 22px; opacity: 0; box-shadow: 0 10px 0 rgba(0,0,0,.18); }
+      .prompt .tx { flex: 1; font-family: "MontserratBold", sans-serif; font-size: 36px; color: #151515; white-space: nowrap; overflow: hidden; }
+      .prompt .tx i { display: inline-block; width: 4px; height: 44px; background: #151515; margin-left: 4px; vertical-align: -8px; }
+      .prompt .go { width: 92px; height: 92px; border-radius: 26px; background: #d4ff1f; display: flex; align-items: center; justify-content: center; font-family: "MontserratBlack", sans-serif; font-size: 50px; color: #101010; }
+      .prompt .bar { position: absolute; left: 36px; right: 36px; bottom: -34px; height: 14px; border-radius: 8px; background: rgba(255,255,255,.3); }
+      .prompt .bar b { display: block; height: 100%; width: 0; border-radius: 8px; background: #d4ff1f; }
       #hud { position: absolute; inset: 0; opacity: 0; }
       .hudtxt { position: absolute; font-family: "MontserratBold", monospace; color: #fff; font-size: 34px; letter-spacing: 0.14em; text-shadow: 0 2px 0 rgba(0,0,0,.8), 0 0 14px rgba(0,0,0,.7); }
       .rec { position: absolute; left: 70px; top: 190px; display: flex; align-items: center; gap: 14px; font-family: "MontserratBold", sans-serif; font-size: 36px; letter-spacing: 0.16em; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.8); }
@@ -57,6 +72,8 @@
       await Promise.all(["BebasNeue", "MontserratBlack", "MontserratBold"].map((f) => document.fonts.load(`100px ${f}`)));
       await document.fonts.ready;
       const EV = JSON.parse(window.__hyperframes.getVariables().events);
+      const THEME = window.__hyperframes.getVariables().theme || "fire";
+      if (THEME === "lime") document.body.classList.add("lime");
       const stage = document.getElementById("stage");
       const tl = gsap.timeline({ paused: true });
       const SIZE = { xs: 62, sm: 104, md: 168, lg: 250, xl: 350, mega: 620 };
@@ -76,12 +93,12 @@
       function mkWord(spec) {
         const wm = document.createElement("span"); wm.className = "wm";
         const w = document.createElement("span");
-        const fam = "f-" + (spec.f || (["xs", "sm"].includes(spec.s || "md") ? "bold" : (spec.f2 || "bebas")));
+        const fam = "f-" + (spec.f || (["xs", "sm"].includes(spec.s || "md") ? "bold" : (spec.f2 || (THEME === "lime" ? "black" : "bebas"))));
         const cls = ["w", fam, "c-" + (spec.c || "w")];
         w.className = cls.join(" ");
         const fs = (spec.px || SIZE[spec.s || "md"] || 168) + "px";
         w.style.fontSize = fs;
-        if (spec.fire) {
+        if (spec.fire && THEME !== "lime") {
           // fire word = black outline underlay + gradient face (a gradient clipped to text cannot carry its own outline)
           w.style.color = "transparent"; w.style.textShadow = "none"; w.style.webkitTextStroke = "0";
           w.style.position = "relative";
@@ -147,7 +164,7 @@
           words.forEach((m) => {
             const at = m.spec.at ?? auto; auto = at + (e.stagger ?? 0.1);
             (ENTER[m.spec.a || e.anim || "pop"] || ENTER.pop)(m.w, at, m);
-            if (m.spec.fire) {
+            if (m.spec.fire && THEME !== "lime") {
               m.w.style.filter = "url(#heat) drop-shadow(0 0 26px rgba(255,110,0,.95))";
               HEATS.push({ el: m.w, t0: at, t1 });
             }
@@ -179,6 +196,35 @@
           stage.appendChild(b);
           tl.fromTo(b, { opacity: 0, x: -80, scale: 0.8 }, { opacity: 1, x: 0, scale: 1, duration: 0.35, ease: "back.out(2)" }, t0);
           tl.to(b, { opacity: 0, x: 60, duration: 0.25, ease: "power2.in" }, t1 - 0.25);
+        } else if (e.type === "pill") {
+          // toggle pill: starts OFF, flips ON at e.flip (seconds, absolute), label swaps to e.on_text
+          const p = document.createElement("div"); p.className = "pill"; p.style.left = (e.x ?? 90) + "px"; p.style.top = (e.y ?? 220) + "px";
+          p.innerHTML = '<div class="sw"><div class="kn"></div></div><div class="lb"></div>';
+          stage.appendChild(p);
+          const sw = p.querySelector(".sw"), kn = p.querySelector(".kn"), lb = p.querySelector(".lb");
+          lb.textContent = e.off_text || "OFF";
+          const flip = e.flip ?? t0 + 0.5;
+          tl.fromTo(p, { opacity: 0, scale: 0.6, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "back.out(2.2)" }, t0);
+          tl.to(sw, { backgroundColor: "#d4ff1f", duration: 0.18 }, flip);
+          tl.to(kn, { x: 76, duration: 0.22, ease: "back.out(2)" }, flip);
+          tl.set(lb, { textContent: e.on_text || "ON" }, flip + 0.05);
+          tl.fromTo(p, { boxShadow: "0 0 0 0 rgba(212,255,31,0)" }, { boxShadow: "0 0 0 14px rgba(212,255,31,0.9)", duration: 0.12, yoyo: true, repeat: 1 }, flip);
+          tl.to(p, { borderColor: "#d4ff1f", duration: 0.1 }, flip);
+          tl.to(p, { opacity: 0, x: -60, duration: 0.25, ease: "power2.in" }, t1 - 0.25);
+        } else if (e.type === "prompt") {
+          // UI prompt card: text types in, send button presses, a progress bar fills
+          const c = document.createElement("div"); c.className = "prompt"; c.style.top = (e.y ?? 1200) + "px"; if (e.x != null) c.style.left = e.x + "px"; if (e.w != null) c.style.width = e.w + "px";
+          c.innerHTML = '<div class="tx"><span></span><i></i></div><div class="go">↑</div><div class="bar"><b></b></div>';
+          stage.appendChild(c);
+          const span = c.querySelector(".tx span"), caret = c.querySelector(".tx i"), go = c.querySelector(".go"), bar = c.querySelector(".bar b");
+          const text = e.text || ""; const typeStart = e.type_at ?? t0 + 0.3, typeDur = e.type_dur ?? 1.0;
+          const o = { k: 0 };
+          tl.fromTo(c, { opacity: 0, y: 70, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: "back.out(1.8)" }, t0);
+          tl.to(o, { k: text.length, duration: typeDur, ease: "none", onUpdate: () => { span.textContent = text.slice(0, Math.round(o.k)); caret.style.opacity = (Math.floor(o.k) % 2) ? 1 : 0.2; } }, typeStart);
+          const sub = typeStart + typeDur + 0.1;
+          tl.to(go, { scale: 0.82, duration: 0.07, yoyo: true, repeat: 1 }, sub);
+          tl.to(bar, { width: "100%", duration: Math.max(0.3, t1 - 0.35 - sub - 0.1), ease: "power1.inOut" }, sub + 0.12);
+          tl.to(c, { opacity: 0, y: -50, scale: 0.97, duration: 0.25, ease: "power2.in" }, t1 - 0.25);
         } else if (e.type === "emoji") {
           const m = document.createElement("div"); m.className = "emoji"; m.textContent = e.e; m.style.left = (e.x ?? 800) + "px"; m.style.top = (e.y ?? 400) + "px";
           m.style.fontSize = (e.px ?? 160) + "px"; stage.appendChild(m);
@@ -225,7 +271,8 @@
           cir.setAttribute("cx", String(e.x ?? 540)); cir.setAttribute("cy", String(e.y ?? 760)); cir.setAttribute("r", "20");
           cir.setAttribute("fill", "none"); cir.setAttribute("stroke", e.color || "#ffd9a0"); cir.setAttribute("stroke-width", String(e.w ?? 7)); cir.setAttribute("opacity", "0");
           sv.appendChild(cir); stage.appendChild(sv);
-          tl.fromTo(cir, { attr: { r: 30 }, opacity: 0.95 }, { attr: { r: (e.size ?? 16) * 40 }, opacity: 0, duration: e.dur ?? 0.55, ease: "power3.out" }, t0);
+          tl.set(cir, { opacity: 0 }, 0);
+          tl.fromTo(cir, { attr: { r: 30 }, opacity: 0.95 }, { attr: { r: (e.size ?? 16) * 40 }, opacity: 0, duration: e.dur ?? 0.55, ease: "power3.out", immediateRender: false }, t0);
         }
       });
 
