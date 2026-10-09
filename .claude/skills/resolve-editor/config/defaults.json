@@ -1,0 +1,68 @@
+{
+  "mode": "autopilot",
+  "output": {
+    "default_ratio": "9:16",
+    "fps": 30,
+    "lufs": -14,
+    "true_peak": -1.5,
+    "ratios": {
+      "9:16": [1080, 1920],
+      "4:5": [1080, 1350],
+      "1:1": [1080, 1080],
+      "16:9": [1920, 1080]
+    }
+  },
+  "transcribe": {
+    "model": "small",
+    "language": "auto",
+    "device": "auto",
+    "verbatim_prompt": true
+  },
+  "silence": {
+    "noise_db": -35,
+    "min_dur": 0.3
+  },
+  "cut": {
+    "segment_gap": 0.55,
+    "max_inner_gap": 0.7,
+    "pad_pre": 0.06,
+    "pad_post": 0.10,
+    "min_range": 0.2,
+    "retake_similarity": 0.72,
+    "retake_len_ratio": 0.6,
+    "restart_window": 6.0,
+    "restart_prefix_similarity": 0.75,
+    "cue_max_words": 6,
+    "cue_context_window": 8.0,
+    "lead_in_max_words": 3,
+    "lead_in_window": 3.0,
+    "untranscribed": {
+      "action": "cut",
+      "min": 0.25,
+      "max": 1.2,
+      "bound_gap": 1.5,
+      "min_silence_ratio": 0.05
+    },
+    "fillers_cut": ["um", "umm", "uh", "uhh", "er", "erm", "hmm", "hm", "mm", "mmm", "ah", "ahh"],
+    "fillers_flag": ["like", "basically", "actually", "literally", "you know", "so", "okay", "right"],
+    "cue_phrases": [
+      "sorry", "again", "one more time", "once more", "let me start again", "start again",
+      "let me redo", "redo", "retake", "take two", "take 2", "cut", "my bad", "hold on", "wait", "no no"
+    ],
+    "lead_in_words": ["okay", "ok", "so", "ready", "rolling", "action", "start", "recording", "alright", "right"]
+  },
+  "broll": {
+    "min_len": 1.2,
+    "max_len": 3.5,
+    "max_coverage": 0.45,
+    "start_lead": 0.08,
+    "keep_face_seconds": 2.5
+  },
+  "qc": {
+    "black_min_dur": 0.1,
+    "freeze_min_dur": 1.0,
+    "mid_silence_max": 0.8,
+    "lufs_tolerance": 1.5,
+    "dur_tolerance": 1.0
+  }
+}

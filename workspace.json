@@ -1,0 +1,18 @@
+{
+  "mode": "autopilot",
+  "library": {
+    "broll_paths": [],
+    "sfx_paths": [],
+    "music_paths": []
+  },
+  "defaults": {
+    "ratio": "9:16",
+    "language": "auto",
+    "platform": "meta-reels"
+  },
+  "resolve": {
+    "project_prefix": "Dfren",
+    "scratch_project": "Dfren Scratch"
+  },
+  "notes": "Edit freely. mode: 'autopilot' (self-review, no approval stops) or 'checkpoint' (ask before building)."
+}

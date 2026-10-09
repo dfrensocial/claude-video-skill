@@ -1,0 +1,15 @@
+﻿Dfren-Editor.zip
+# large media / generated output
+footage/*
+!footage/.keep
+exports/*
+!exports/.keep
+references/inbox/*
+references/sorted/*
+library/index/*
+*.mp4
+*.mov
+*.mkv
+*.wav
+*.mp3
+__pycache__/

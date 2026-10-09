@@ -1,0 +1,30 @@
+{
+  "client": "CLIENT NAME",
+  "slug": "client-name",
+  "language": "en",
+  "colors": {
+    "primary": "#000000",
+    "accent": "#FFD400",
+    "text": "#FFFFFF",
+    "text_on_light": "#111111",
+    "background": "#000000"
+  },
+  "fonts": {
+    "heading": "Montserrat ExtraBold",
+    "body": "Montserrat SemiBold",
+    "tamil": "Noto Sans Tamil Bold",
+    "files": []
+  },
+  "captions": {
+    "preset": "default-bold-pop",
+    "highlight_color": "#FFD400",
+    "max_words_per_line": 3,
+    "case": "normal"
+  },
+  "logo": {"path": "", "placement": "end-card", "safe_margin_px": 64},
+  "cta": {"text": "", "end_card_seconds": 2.0},
+  "grade": {"lut": "", "look_notes": "", "reference_clip": ""},
+  "music": {"preferred_tags": [], "avoid_tags": []},
+  "do_not": ["Do not use competitor names on screen", "Do not make unverifiable claims (cure, guaranteed results)"],
+  "notes": ""
+}
