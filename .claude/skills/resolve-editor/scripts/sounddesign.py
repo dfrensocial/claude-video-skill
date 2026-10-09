@@ -227,6 +227,41 @@ def render(spec, out_wav, total=None):
             "rms_dbfs": round(rms, 1), "events": len(report)}
 
 
+def render_stems(spec, out_dir, gain_offset_db=0.0):
+    """One WAV per event (+ the drone) instead of a single bed, so every sound is its own editable clip in Resolve.
+    Returns [{"t", "kind", "file", "dur"}]. gain_offset_db is applied to everything (used to hit the loudness target)."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    total = float(spec.get("total", 18.0))
+    items = []
+
+    def save(sig, name, t, kind):
+        pk = np.abs(sig).max()
+        if pk > 0.98:
+            sig = sig * 0.98 / pk
+        pcm = (np.clip(sig, -1, 1) * 32767).astype("<i2")
+        p = out_dir / name
+        with wave.open(str(p), "wb") as w:
+            w.setnchannels(2)
+            w.setsampwidth(2)
+            w.setframerate(SR)
+            w.writeframes(pcm.tobytes())
+        items.append({"t": round(float(t), 3), "kind": kind, "file": str(p), "dur": round(len(sig) / SR, 3)})
+
+    gain = 10 ** (gain_offset_db / 20)
+    d = spec.get("drone")
+    if d:
+        dr = drone(total, d.get("gain_db", -26), d.get("rise_to")) * gain
+        save(dr, "00_drone.wav", 0.0, "drone")
+    for k, e in enumerate(spec.get("events", [])):
+        rng = np.random.default_rng(1000 + k * 31)
+        kw = {"d": e["dur"]} if e.get("dur") else {}
+        sig = KINDS[e["kind"]](rng, **kw)
+        sig = sig / (np.abs(sig).max() or 1.0) * (10 ** (e.get("gain_db", -12) / 20)) * gain
+        save(sig, f"{k + 1:02d}_{float(e['t']):06.2f}_{e['kind']}.wav", e["t"], e["kind"])
+    return items
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("events")
