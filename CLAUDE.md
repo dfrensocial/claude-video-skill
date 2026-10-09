@@ -29,4 +29,4 @@ Standing rules: autopilot unless told otherwise; never modify originals; duplica
 - New tools: graphics/cards/typo.html + fire-wipe.html, sounddesign.py, compose camera/fx/finish/voice_chain/overlay in/speed/fit/fades. Python for compose/graphics/sounddesign is the default 3.10 (works); only Resolve calls need py -3.13.
 
 ## Standard process
-For every job follow `SOP.md` (copy lives on the Desktop hub `Dfren Video Editor`): intake.py -> style_brief -> creative_plan.json -> make_assets.py -> resolve_job.py all. Resolve is mandatory; the delivered file is a Resolve render.
+For every job follow `SOP.md` (lives in this repo; jobs go in `jobs/`, nothing on the Desktop): intake.py -> style_brief -> creative_plan.json -> make_assets.py -> resolve_job.py all. Resolve is mandatory; the delivered file is a Resolve render.

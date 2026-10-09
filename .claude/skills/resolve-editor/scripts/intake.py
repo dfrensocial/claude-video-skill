@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""STEP 1 of the SOP: take the user's four inputs, organise them in a job folder on the Desktop, analyse everything.
+"""STEP 1 of the SOP: take the user's four inputs, organise them in <engine>/jobs/<date>_<slug>/, analyse everything.
 
   intake.py --raw FILE [FILE ...] --reference FILE --type "hype transition reel" --idea "text of the idea" [--name slug]
             [--client X] [--lang auto|en|ta|tanglish] [--hub "C:/Users/<you>/Desktop/Dfren Video Editor"] [--placement organic|paid]
@@ -34,10 +34,8 @@ VIDEO = {".mp4", ".mov", ".mkv", ".m4v", ".avi", ".webm", ".mxf", ".mts"}
 
 
 def default_hub():
-    for c in (Path.home() / "OneDrive" / "Desktop", Path.home() / "Desktop"):
-        if c.is_dir():
-            return c / "Dfren Video Editor"
-    return Path.home() / "Dfren Video Editor"
+    """Jobs live inside the engine repo (jobs/ is git-ignored); nothing is written to the Desktop."""
+    return Path(__file__).resolve().parents[4]
 
 
 def slug(s, n=40):

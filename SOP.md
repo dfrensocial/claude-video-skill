@@ -21,9 +21,9 @@ Scripts live in `E:\video editor claude\.claude\skills\resolve-editor\scripts\` 
 - (a) raw video file(s), (b) type of edit, (c) **exactly one** reference video, (d) a text description of the idea/transition.
 Missing or more than one reference -> ask. Everything else is derived.
 
-## 3. Step 1 - Intake (organises the inputs; the Desktop hub)
+## 3. Step 1 - Intake (organises the inputs)
 `python S/intake.py --raw FILE... --reference FILE --type "..." --idea "..." --name SLUG [--client X --lang tanglish|en --placement organic|paid]`
-Creates `Desktop\Dfren Video Editor\jobs\<date>_<slug>\` with `inputs/` (read-only copies, `brief.md`, `manifest.json`), `analysis/` (contact sheets, transcript, speech window, colour, reference fingerprint, `memory.md`, `style_brief.md` skeleton), `work/`, `output/`.
+Creates `E:ideo editor claude\jobs\<date>_<slug>\` (git-ignored; nothing is written to the Desktop) with `inputs/` (read-only copies, `brief.md`, `manifest.json`), `analysis/` (contact sheets, transcript, speech window, colour, reference fingerprint, `memory.md`, `style_brief.md` skeleton), `work/`, `output/`.
 
 ## 4. Step 2 - Understand (do not skip; this is what makes it look like the reference)
 - View the contact sheets and the transcript; read `reference_fingerprint.json` (cuts/s, text bursts, palette, wpm, nearest styles).
