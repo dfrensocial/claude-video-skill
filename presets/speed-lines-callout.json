@@ -1,0 +1,30 @@
+{
+  "id": "speed-lines-callout",
+  "technique": "T6",
+  "kind": "parametric",
+  "layers": [
+    "plate: 10 Speed Lines Anime Backgrounds",
+    "rounded card with the clip",
+    "label 'N X SPEED' small caps above",
+    "progress bar + timer under the card"
+  ],
+  "style": {
+    "label_font": "heading",
+    "bar_height_px": 8,
+    "bar_colour": "white"
+  },
+  "timing": {
+    "use_for": "sped-up reference clips",
+    "min_s": 3
+  },
+  "assets": {
+    "search": "speed lines",
+    "kinds": [
+      "10 Speed Lines Anime Backgrounds"
+    ]
+  },
+  "source": "references/sorted/video-finished/Video-67670/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

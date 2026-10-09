@@ -63,6 +63,12 @@
     "freeze_min_dur": 1.0,
     "mid_silence_max": 0.8,
     "lufs_tolerance": 1.5,
-    "dur_tolerance": 1.0
+    "dur_tolerance": 1.0,
+    "rhythm_max_gap_s": 6.0,
+    "rhythm_max_mean_gap_s": 1.6
+  },
+  "captions": {
+    "max_words": 2,
+    "max_chars": 16
   }
 }

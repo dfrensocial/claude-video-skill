@@ -2,7 +2,7 @@
 
 | Placement | Ratio | Size | Notes |
 |---|---|---|---|
-| Reels / Stories | 9:16 | 1080x1920 | keep key text inside the central area; approx. top 14 % (~270 px) and bottom 20-35 % (~380-670 px) are covered by UI - **approximate, verify against Meta's current guide** |
+| Reels / Stories | 9:16 | 1080x1920 | **Measured from the studio's own overlay `assets/asserss/Safe Zone.png` (1080x1920):** top ~148 px blocked; bottom blocked from y~1522 (~398 px); right-hand button column blocked from x~927 for y 819-1920. **Safe text box: x 0-920, y 150-1520** (best: x 60-900, y 220-1450). Left edge is free. Prefer the studio overlay over generic numbers; re-measure if Meta changes the layout. |
 | Feed | 4:5 | 1080x1350 | |
 | Square | 1:1 | 1080x1080 | |
 | Landscape | 16:9 | 1920x1080 | |

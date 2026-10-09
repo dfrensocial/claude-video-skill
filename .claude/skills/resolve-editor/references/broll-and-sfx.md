@@ -9,6 +9,11 @@
 `python3 scripts/index_library.py search --kind broll --q "tea pour steam cup chai" --orient vertical --min-dur 2 --sheet jobs/NAME/broll/s1.jpg`
 Send several synonyms. LOOK at the sheet (tile n = result n). Reject: wrong subject, watermark, wrong orientation, motion that fights the speaker's gesture, brand conflict. If nothing fits, say "no suitable B-roll for <line>" - don't force one; offer a generated card or a punch-in instead.
 
+## Gaps and AI-generated B-roll
+- If `index_library.py stats` shows 0 files for a kind, say so at the start of the job: the studio's `assets/` pack has overlays, green screens and LUTs but **no SFX, no music and no real B-roll**.
+- The references use AI-generated B-roll (stylised 3D character scenes, dramatic stylised shots). Claude cannot generate video here. When a line needs a visual the library lacks, write a **B-roll request list** in the report: one row per moment with the timeline time, the spoken line, a ready-to-paste prompt (subject, action, camera, lighting, 9:16, 3-5 s) and the filename to save as. The user generates them externally and drops them in `footage/` or the B-roll folder; then continue.
+- Stock footage in the references is mostly short (1-3 s) and often sits in a rounded "phone card" (preset `rounded-card-float`) rather than full-bleed; use that when the clip is lower quality or a different aspect ratio.
+
 ## Alignment & colour check
 1. Place → preview render → `qc.py frames` at each B-roll start/end → LOOK.
 2. `color_match.py --target <aroll> --source <broll>`; apply the CDL; re-check. Brand palette from the kit beats literal matching for accents.

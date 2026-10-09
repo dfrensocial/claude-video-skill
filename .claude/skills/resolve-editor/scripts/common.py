@@ -24,7 +24,7 @@ AUDIO_EXT = {".wav", ".mp3", ".m4a", ".aac", ".flac", ".ogg", ".aif", ".aiff", "
 # ---------------------------------------------------------------- json / config
 def load_json(path, default=None):
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8-sig") as f:  # -sig: tolerate the BOM Windows PowerShell adds on `>`
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return default
@@ -106,7 +106,7 @@ def probe_summary(path):
         rot = rot or int((v.get("tags") or {}).get("rotate", 0) or 0)
         if abs(rot) in (90, 270):
             w, h = h, w
-        out.update(width=w, height=h, fps=round(fps, 3), vcodec=v.get("codec_name"),
+        out.update(width=w, height=h, fps=round(fps, 3), vcodec=v.get("codec_name"), pix_fmt=v.get("pix_fmt"),
                    orientation="vertical" if h > w * 1.05 else "horizontal" if w > h * 1.05 else "square",
                    timecode=(v.get("tags") or {}).get("timecode") or (d.get("format", {}).get("tags") or {}).get("timecode"))
     if a:

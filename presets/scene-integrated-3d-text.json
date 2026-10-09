@@ -1,0 +1,27 @@
+{
+  "id": "scene-integrated-3d-text",
+  "technique": "T8",
+  "kind": "parametric",
+  "build": {
+    "engine": "Fusion Text3D or Transform with Corner Pin",
+    "tracking": "only if the camera moves"
+  },
+  "style": {
+    "font": "condensed heavy",
+    "fill": "white-to-grey metallic gradient",
+    "shadow": true,
+    "rotation_deg": [
+      -90,
+      90
+    ]
+  },
+  "entrance": {
+    "type": "slide-in-along-axis",
+    "frames": 8,
+    "ease": "outCubic"
+  },
+  "source": "references/sorted/video-finished/Video-54546/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

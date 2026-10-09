@@ -1,0 +1,29 @@
+{
+  "id": "torn-paper-label",
+  "technique": "T10",
+  "kind": "parametric",
+  "style": {
+    "label_colour": "#F2C200",
+    "text_colour": "#111111",
+    "font": "slab serif bold",
+    "jitter_fps": 10,
+    "paper_texture": "newspaper / map plate",
+    "cutout_edge": "white rim + red offset shadow"
+  },
+  "entrance": {
+    "type": "stamp-down",
+    "frames": 6,
+    "ease": "outBack"
+  },
+  "assets": {
+    "search": "paper letters",
+    "kinds": [
+      "Paper effects",
+      "PNGs"
+    ]
+  },
+  "source": "references/sorted/video-finished/Video-95528/sheet.jpg, Video-84658/sheet.jpg, Video-93227/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

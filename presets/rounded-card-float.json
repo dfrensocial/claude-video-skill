@@ -1,0 +1,40 @@
+{
+  "id": "rounded-card-float",
+  "technique": "T5",
+  "kind": "parametric",
+  "style": {
+    "corner_radius_px": 36,
+    "shadow": {
+      "blur": 40,
+      "opacity": 0.45,
+      "dy": 16
+    },
+    "border": "none",
+    "tilt_3d_deg": [
+      0,
+      8
+    ]
+  },
+  "entrance": {
+    "type": "scale-pop",
+    "frames": 8,
+    "ease": "outBack",
+    "from": 0.85
+  },
+  "exit": {
+    "type": "scale-down-fade",
+    "frames": 6,
+    "ease": "inCubic"
+  },
+  "layout": {
+    "phone_card_ratio": "9:16",
+    "y_pct": [
+      8,
+      55
+    ]
+  },
+  "source": "references/sorted/video-finished/Video-54546/sheet.jpg, Video-67670/sheet.jpg, Video-5612/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

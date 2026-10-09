@@ -203,6 +203,7 @@ def main():
         h = sha1(p)
         if h in seen:
             continue
+        seen.add(h)  # also dedupe identical files inside this same batch
         try:
             probe = probe_summary(p) if p.suffix.lower() in (VIDEO_EXT | AUDIO_EXT | IMAGE_EXT | {".gif"}) else None
         except Exception:  # noqa: BLE001

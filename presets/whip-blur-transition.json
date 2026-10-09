@@ -1,0 +1,19 @@
+{
+  "id": "whip-blur-transition",
+  "technique": "T13",
+  "kind": "parametric",
+  "build": {
+    "effect": "Directional Blur + Transform keyframes on both clips",
+    "length_frames": [
+      6,
+      10
+    ],
+    "ease": "inOutCubic",
+    "direction": "alternate L/R"
+  },
+  "sfx": "swish",
+  "source": "references/sorted/video-finished/Video-86635/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

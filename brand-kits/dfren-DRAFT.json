@@ -1,0 +1,36 @@
+{
+  "_status": "DRAFT inferred from the yellow-tee reference reels (54546, 5612, 67670, 86635). NOT confirmed by the user: verify colours, fonts and whether this is the agency kit or a personal-brand kit before any client job.",
+  "client": "Dfren Marketing Agency",
+  "slug": "dfren",
+  "language": "tanglish",
+  "style_family": "A",
+  "colors": {
+    "primary": "#0B0A0B",
+    "accent": "#E8AA05",
+    "accent_2": "#C8171E",
+    "text": "#FFFFFF",
+    "text_on_light": "#111111",
+    "background": "#E8AA05"
+  },
+  "fonts": {
+    "heading": "heavy condensed sans (exact family unknown - ask the user for the font file)",
+    "body": "bold geometric sans (unknown)",
+    "tamil": "Noto Sans Tamil Bold",
+    "files": []
+  },
+  "captions": {
+    "preset": "word-pop-caption",
+    "highlight_color": "#E8AA05",
+    "max_words_per_line": 2,
+    "case": "normal",
+    "emphasis_words": [],
+    "tanglish_subword": true
+  },
+  "numbers": {"grouping": "western", "currency_symbol": "Rs", "suffix": "/-"},
+  "logo": {"path": "", "placement": "end-card", "safe_margin_px": 64},
+  "cta": {"text": "", "end_card_seconds": 2.0},
+  "grade": {"lut": "", "look_notes": "coloured gel room lighting (magenta/blue, red, green) kept as a look; yellow brand plates for info cards", "reference_clip": "references/sorted/video-finished/Video-86635.mp4"},
+  "music": {"preferred_tags": [], "avoid_tags": []},
+  "do_not": ["Do not use competitor names on screen", "Do not make unverifiable claims (guaranteed results, income promises)", "Do not invent statistics; every number on a card must come from the brief"],
+  "notes": "Hex values are measured from reference frames (palette #E8AA05 / #DAA71C / #E5A90E in the yellow reels), not from a brand guide."
+}

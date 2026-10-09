@@ -1,0 +1,21 @@
+{
+  "id": "cut-rhythm-ad-reel",
+  "technique": "rhythm",
+  "kind": "parametric",
+  "timing": {
+    "avg_shot_s": [
+      1.8,
+      2.8
+    ],
+    "visual_change_every_s": [
+      1.5,
+      2.5
+    ],
+    "max_unbroken_face_s": 8,
+    "use_for": "Tanglish talking-head ad/education reels"
+  },
+  "source": "references/sorted/video-finished/Video-54546, Video-86635, Video-95528, Video-93227 (measured)",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

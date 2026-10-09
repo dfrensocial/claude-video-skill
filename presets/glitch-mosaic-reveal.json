@@ -1,0 +1,13 @@
+{
+  "id": "glitch-mosaic-reveal",
+  "technique": "T12",
+  "kind": "parametric",
+  "build": {
+    "effect": "pixel/mosaic + RGB split, 8-12 frames",
+    "use_for": "hook reveal or AI-topic words"
+  },
+  "source": "references/sorted/video-finished/Video-86514/sheet.jpg, Video-44049/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

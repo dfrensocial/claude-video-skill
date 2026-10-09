@@ -1,0 +1,25 @@
+{
+  "id": "count-up-stat",
+  "technique": "T7",
+  "kind": "parametric",
+  "entrance": {
+    "type": "count-up",
+    "frames": 18,
+    "ease": "outExpo"
+  },
+  "style": {
+    "font": "condensed heavy",
+    "colour": "#FFFFFF",
+    "label_above": "small 'Total Amount'",
+    "suffix": "/-",
+    "format": "western commas 151,250 (as in references; confirm Indian 1,51,250 with the user)"
+  },
+  "exit": {
+    "type": "fade",
+    "frames": 5
+  },
+  "source": "references/sorted/video-finished/Video-54546/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

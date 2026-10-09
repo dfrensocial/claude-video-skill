@@ -3,7 +3,8 @@
   "library": {
     "broll_paths": [],
     "sfx_paths": [],
-    "music_paths": []
+    "music_paths": [],
+    "assets_paths": ["E:/video editor claude/assets/asserss"]
   },
   "defaults": {
     "ratio": "9:16",

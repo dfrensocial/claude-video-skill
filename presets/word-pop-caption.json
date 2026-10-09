@@ -1,0 +1,52 @@
+{
+  "id": "word-pop-caption",
+  "technique": "T1",
+  "kind": "parametric",
+  "entrance": {
+    "type": "scale-pop+blur-in",
+    "frames": 6,
+    "ease": "outBack",
+    "from": 0.82,
+    "blur_px_from": 8
+  },
+  "exit": {
+    "type": "cut-or-fade",
+    "frames": 2
+  },
+  "timing": {
+    "hold_min_s": 0.28,
+    "max_words": 2,
+    "break_on": "punctuation or pause > 0.35 s"
+  },
+  "style": {
+    "font": "heading",
+    "weight": "heavy",
+    "case": "keep",
+    "colour": "#FFFFFF",
+    "shadow": true,
+    "stroke_px": 0,
+    "emphasis": {
+      "scale": 1.25,
+      "colour": "accent",
+      "max_per_event": 1,
+      "never_consecutive": true
+    },
+    "sub_word": {
+      "for": "tanglish",
+      "size_ratio": 0.35,
+      "position": "under"
+    }
+  },
+  "layout": {
+    "y_pct": [
+      28,
+      45
+    ],
+    "safe_zone": "platforms.md",
+    "align": "center"
+  },
+  "source": "references/sorted/video-finished/Video-86635/sheet.jpg, Video-5612/sheet.jpg, Video-54546/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

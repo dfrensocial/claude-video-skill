@@ -1,0 +1,26 @@
+{
+  "id": "screen-rec-highlight",
+  "technique": "T9",
+  "kind": "parametric",
+  "build": {
+    "crop": "zoom to the UI row that matters",
+    "glow": "green glow bar (Glow FX / Fusion)",
+    "card": "rounded-card-float"
+  },
+  "entrance": {
+    "type": "punch-in",
+    "frames": 10,
+    "ease": "inOutCubic",
+    "scale": [
+      1.0,
+      1.35
+    ]
+  },
+  "timing": {
+    "hold_min_s": 1.2
+  },
+  "source": "references/sorted/video-finished/Video-54546/sheet.jpg, Video-5612/sheet.jpg, Video-93227/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

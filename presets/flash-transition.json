@@ -1,0 +1,26 @@
+{
+  "id": "flash-transition",
+  "technique": "T11",
+  "kind": "parametric",
+  "build": {
+    "clip": "Film Burn Transitions / Glow FX",
+    "blend": "screen",
+    "length_frames": [
+      6,
+      14
+    ],
+    "centre_on_cut": true
+  },
+  "sfx": "whoosh or impact, 1-3 frames before the flash peak",
+  "assets": {
+    "search": "film burn flash",
+    "kinds": [
+      "Film Burn Transitions",
+      "Glow FX"
+    ]
+  },
+  "source": "references/sorted/video-finished/Video-44049/sheet.jpg, Video-95528/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}

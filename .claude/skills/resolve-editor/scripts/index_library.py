@@ -20,12 +20,19 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from common import (AUDIO_EXT, VIDEO_EXT, contact_sheet, extract_frame, find_workspace, have,  # noqa: E402
+from common import (AUDIO_EXT, IMAGE_EXT, VIDEO_EXT, contact_sheet, extract_frame, find_workspace, have,  # noqa: E402
                     load_config, load_json, probe_summary, save_json)
 
-KIND_EXT = {"broll": VIDEO_EXT | {".gif"}, "sfx": AUDIO_EXT, "music": AUDIO_EXT}
-KEY = {"broll": "broll_paths", "sfx": "sfx_paths", "music": "music_paths"}
+KIND_EXT = {"broll": VIDEO_EXT | {".gif"}, "sfx": AUDIO_EXT, "music": AUDIO_EXT,
+            "assets": VIDEO_EXT | IMAGE_EXT | {".gif", ".cube"}}
+KEY = {"broll": "broll_paths", "sfx": "sfx_paths", "music": "music_paths", "assets": "assets_paths"}
 SPLIT = re.compile(r"[^A-Za-z0-9]+|(?<=[a-z])(?=[A-Z])")
+EXPORT_STAMP = re.compile(r"^\d{8}t\d{6}z$")  # Google-Drive zip suffix, e.g. -20241225T142251Z-001
+ALPHA_FMTS = ("rgba", "bgra", "argb", "abgr", "yuva", "ya8", "ya16", "gbrap", "pal8")
+# folder/name words that mean "black or green background, composite with a blend mode / key" -> hint only
+SCREEN_WORDS = {"grain", "burn", "leak", "leaks", "glow", "overlay", "overlays", "sparkle", "smoke", "fire", "dust",
+                "explosion", "blast", "light", "lights", "flare", "bokeh", "particles"}
+KEY_WORDS = {"green", "chroma", "greenscreen"}
 
 
 def tokens_of(rel_parts):
@@ -34,7 +41,7 @@ def tokens_of(rel_parts):
         stem = Path(part).stem if i == len(rel_parts) - 1 else part
         for t in SPLIT.split(stem):
             t = t.lower()
-            if len(t) >= 2 and not t.isdigit():
+            if len(t) >= 2 and not t.isdigit() and not EXPORT_STAMP.match(t) and t != "copy":
                 (name if i == len(rel_parts) - 1 else folder).add(t)
     return sorted(folder), sorted(name)
 
@@ -46,17 +53,69 @@ def index_path(kind):
     return ws / "library" / "index" / f"{kind}.json"
 
 
+def clean_category(part):
+    """'Glow FX-20241225T142251Z-001' -> 'Glow FX'."""
+    return re.sub(r"-\d{8}T\d{6}Z-\d+.*$", "", part).strip()
+
+
+def asset_facts(path, rel, s, folder, name):
+    """Extra fields for the `assets` kind: category, alpha, blend hint, asset type."""
+    ext = path.suffix.lower()
+    cat = clean_category(rel.parts[0]) if len(rel.parts) > 1 else "(root)"
+    toks = set(folder) | set(name)
+    if ext == ".cube":
+        return {"category": cat, "asset_type": "lut", "alpha": False, "blend": None}
+    pix = (s.get("pix_fmt") or "").lower()
+    alpha = pix.startswith(ALPHA_FMTS)
+    atype = "image" if ext in IMAGE_EXT else "video"
+    bg = None
+    if alpha:
+        blend = "normal"          # real transparency: place on V3/V4 as is
+    elif atype == "video":
+        bg = corner_background(path, s.get("duration") or 0)
+        blend = {"green": "chroma-key", "black": "screen", "white": "multiply"}.get(bg)
+        if blend is None:         # corners inconclusive: fall back to name hints, else it is a full-frame plate
+            blend = ("chroma-key" if toks & KEY_WORDS else "screen" if toks & SCREEN_WORDS else "plate")
+    else:
+        blend = "normal"
+    return {"category": cat, "asset_type": atype, "alpha": bool(alpha), "blend": blend, "bg": bg}
+
+
+def corner_background(path, duration):
+    """Classify the background from the four corners of one frame: green / black / white / None."""
+    try:
+        from PIL import Image
+        tmp = Path(tempfile.mkdtemp()) / "c.jpg"
+        extract_frame(str(path), duration * 0.35, tmp, width=96)
+        im = Image.open(tmp).convert("RGB")
+        w, h = im.size
+        px = [im.getpixel(p) for p in ((2, 2), (w - 3, 2), (2, h - 3), (w - 3, h - 3))]
+        r, g, b = (sum(c[i] for c in px) / 4 for i in range(3))
+        if g > 140 and r < 110 and b < 110:
+            return "green"
+        if max(r, g, b) < 28:
+            return "black"
+        if min(r, g, b) > 232:
+            return "white"
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
 def probe_one(args):
     path, root, kind = args
-    try:
-        s = probe_summary(path)
-    except Exception:  # noqa: BLE001
-        return None
     rel = path.relative_to(root)
     folder, name = tokens_of((root.name,) + rel.parts)
+    try:
+        s = {"duration": 0.0, "has_audio": False} if path.suffix.lower() == ".cube" else probe_summary(path)
+    except Exception:  # noqa: BLE001
+        return None
     e = {"path": str(path), "root": str(root), "size": path.stat().st_size, "mtime": int(path.stat().st_mtime),
          "duration": s["duration"], "folder_tokens": folder, "name_tokens": name}
-    if kind == "broll":
+    if kind == "assets":
+        e.update(width=s.get("width"), height=s.get("height"), fps=s.get("fps"), orientation=s.get("orientation"),
+                 **asset_facts(path, rel, s, folder, name))
+    elif kind == "broll":
         e.update(width=s.get("width"), height=s.get("height"), fps=s.get("fps"),
                  orientation=s.get("orientation"), has_audio=s["has_audio"])
     else:
@@ -89,13 +148,20 @@ def scan(kinds, cfg):
         print(f"{kind}: {len(entries)} files indexed ({len(jobs)} new/changed)")
 
 
-def search(kind, q, orient=None, min_dur=None, max_dur=None, top=12, sheet=None):
+def search(kind, q, orient=None, min_dur=None, max_dur=None, top=12, sheet=None,
+           category=None, alpha=None, asset_type=None):
     entries = load_json(index_path(kind), []) or []
     if not entries:
         raise SystemExit(f"{kind} index is empty - run: index_library.py scan")
     terms = [t.lower() for t in SPLIT.split(q) if len(t) >= 2]
     scored = []
     for e in entries:
+        if category and category.lower() not in (e.get("category") or "").lower():
+            continue
+        if alpha is not None and bool(e.get("alpha")) != alpha:
+            continue
+        if asset_type and e.get("asset_type") != asset_type:
+            continue
         if orient and e.get("orientation") and e["orientation"] != orient:
             continue
         if min_dur and e["duration"] < min_dur:
@@ -116,7 +182,11 @@ def search(kind, q, orient=None, min_dur=None, max_dur=None, top=12, sheet=None)
         res.append({"n": i, "score": round(s, 1), "path": e["path"], "duration": e["duration"],
                     "orientation": e.get("orientation"), "res": f"{e.get('width')}x{e.get('height')}" if e.get("width") else None,
                     "tags": e["folder_tokens"] + e["name_tokens"]})
-    if sheet and kind == "broll" and res and have("ffmpeg"):
+        if kind == "assets":
+            res[-1].update(category=e.get("category"), asset_type=e.get("asset_type"),
+                           alpha=e.get("alpha"), blend=e.get("blend"))
+    if (sheet and kind in ("broll", "assets") and res and have("ffmpeg")
+            and not any(r.get("asset_type") == "lut" for r in res)):  # LUTs have no picture: keep tile numbers honest
         tmp = Path(tempfile.mkdtemp())
         frames = []
         for r in res:
@@ -131,7 +201,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("scan")
-    p.add_argument("--kinds", nargs="+", default=["broll", "sfx", "music"])
+    p.add_argument("--kinds", nargs="+", default=["broll", "sfx", "music", "assets"], choices=list(KEY))
     p = sub.add_parser("search")
     p.add_argument("--kind", required=True, choices=list(KEY))
     p.add_argument("--q", default="")
@@ -140,17 +210,25 @@ def main():
     p.add_argument("--max-dur", type=float)
     p.add_argument("--top", type=int, default=12)
     p.add_argument("--sheet")
+    p.add_argument("--category", help="assets only: folder category substring, e.g. 'glow' or 'paper'")
+    p.add_argument("--alpha", action="store_true", help="assets only: only files with real transparency")
+    p.add_argument("--asset-type", choices=["video", "image", "lut"], help="assets only")
     sub.add_parser("stats")
     a = ap.parse_args()
     cfg = load_config()
     if a.cmd == "scan":
         scan(a.kinds, cfg)
     elif a.cmd == "search":
-        print(json.dumps(search(a.kind, a.q, a.orient, a.min_dur, a.max_dur, a.top, a.sheet), indent=1))
+        print(json.dumps(search(a.kind, a.q, a.orient, a.min_dur, a.max_dur, a.top, a.sheet,
+                                a.category, True if a.alpha else None, a.asset_type), indent=1))
     else:
         for k in KEY:
             e = load_json(index_path(k), []) or []
             print(f"{k}: {len(e)} files, {sum(x['duration'] for x in e) / 60:.0f} min")
+            if k == "assets" and e:
+                from collections import Counter
+                for cat, n in Counter(x.get("category") for x in e).most_common():
+                    print(f"   {cat}: {n}")
 
 
 if __name__ == "__main__":

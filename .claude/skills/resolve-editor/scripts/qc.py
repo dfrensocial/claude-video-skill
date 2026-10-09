@@ -36,6 +36,32 @@ def freeze_intervals(path, min_dur):
     return [{"start": s, "end": (ends[i] if i < len(ends) else dur)} for i, s in enumerate(starts)]
 
 
+def rhythm(path, info, q):
+    """Longest and mean gap between motion bursts (cut, graphic or punch-in changes what is on screen).
+
+    Limits come from the 12 studio references (longest gap 2.9-8.3 s, mean gap 0.6-1.4 s): see
+    references/reference-analysis.md. A proxy, not a judgement: face movement also makes bursts, so read the
+    flagged time ranges on a frame sheet before acting. Needs numpy; returns None if unavailable."""
+    try:
+        from ingest_references import bursts, motion_energy
+    except Exception:  # noqa: BLE001
+        return None
+    me = motion_energy(path, info, min(info["duration"], 180))
+    if not me:
+        return None
+    b = bursts(*me)
+    dur = info["duration"]
+    marks = [0.0] + [x["start"] for x in b] + [dur]
+    gaps = sorted(((marks[i + 1] - marks[i], marks[i]) for i in range(len(marks) - 1)), reverse=True)
+    mean = dur / max(len(marks) - 1, 1)
+    max_gap, max_mean = q.get("rhythm_max_gap_s", 6.0), q.get("rhythm_max_mean_gap_s", 1.6)
+    long_ = [f"{s:.1f}-{s + g:.1f}s" for g, s in gaps if g > max_gap][:4]
+    bad = bool(long_) or mean > max_mean
+    return {"status": "WARN" if bad else "PASS",
+            "detail": f"mean change every {mean:.2f}s (limit {max_mean}); longest static {gaps[0][0]:.1f}s at {gaps[0][1]:.1f}s"
+                      + (f" (limit {max_gap}s; check {', '.join(long_)})" if long_ else "")}
+
+
 def check(path, expect_res=None, expect_fps=None, expect_dur=None, lufs=None, cfg=None):
     cfg = cfg or load_config()
     q = cfg["qc"]
@@ -91,6 +117,9 @@ def check(path, expect_res=None, expect_fps=None, expect_dur=None, lufs=None, cf
         fr = freeze_intervals(path, q["freeze_min_dur"])
         add("frozen frames", "PASS" if not fr else "WARN",
             "none" if not fr else "; ".join(f"{b['start']:.1f}-{b['end']:.1f}s" for b in fr) + " (stuck B-roll / gap? intentional hold?)")
+        rh = rhythm(path, info, q)
+        if rh:
+            add("visual rhythm", rh["status"], rh["detail"])
     return {"file": str(path), "info": info, "checks": res,
             "ok": not any(r["status"] == "FAIL" for r in res)}
 

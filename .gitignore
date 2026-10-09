@@ -13,3 +13,18 @@ library/index/*
 *.wav
 *.mp3
 __pycache__/
+
+# user media libraries (large)
+assets/
+Instagram reference/
+
+# derived frames of third-party videos and test outputs
+references/analysis/*.jpg
+references/analysis/cap-test*
+references/analysis/*.err.txt
+references/analysis/assets-test*
+
+# derived from third-party videos / local paths (repo is public)
+references/analysis/*.transcript.json
+references/catalog.json
+references/REPORT.md

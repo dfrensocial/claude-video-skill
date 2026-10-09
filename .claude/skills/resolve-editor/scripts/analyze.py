@@ -68,7 +68,35 @@ def loudness(path):
             "lra": grab(r"LRA:\s+(-?[\d.]+)\s+LU"), "true_peak_dbfs": grab(r"Peak:\s+(-?[\d.]+)\s+dBFS")}
 
 
+def transcript_quality(t):
+    """Cheap trust signal for an ASR result: share of low-confidence words and the longest run of one repeated
+    word (Whisper loops on music / unfamiliar languages). Measured on this studio's references: English clips
+    -> 0-5 % low-confidence; Tanglish clips with `small`+auto -> 25-40 % and loops (see CLAUDE.md)."""
+    words = t.get("words", [])
+    n = len(words)
+    low = sum(1 for w in words if w.get("p", 1.0) < 0.5)
+    run = best = 1
+    for a, b in zip(words, words[1:]):
+        run = run + 1 if a["w"].strip(" ,.?!").lower() == b["w"].strip(" ,.?!").lower() else 1
+        best = max(best, run)
+    ratio = round(low / n, 2) if n else 1.0
+    unreliable = n == 0 or ratio > 0.25 or best >= 4
+    note = ("OK for word-level cuts" if not unreliable else
+            "UNRELIABLE: do not cut or caption from these words. Ask for the script/SRT, use a larger model or "
+            "--lang en/ta explicitly (editorial-craft.md), and fall back to silence-based cutting.")
+    return {"words": n, "low_conf_ratio": ratio, "max_repeat_run": best, "unreliable": unreliable, "note": note}
+
+
 def transcribe(path, lang="auto", model="small", device="auto", verbatim=True):
+    t = _transcribe(path, lang, model, device, verbatim)
+    t["quality"] = transcript_quality(t)
+    if t["quality"]["unreliable"]:
+        print(f"[WARN] transcript quality: {t['quality']['note']} "
+              f"(low-conf {t['quality']['low_conf_ratio']}, repeat run {t['quality']['max_repeat_run']})", file=sys.stderr)
+    return t
+
+
+def _transcribe(path, lang="auto", model="small", device="auto", verbatim=True):
     duration = probe_summary(path)["duration"]
     try:
         from faster_whisper import WhisperModel  # type: ignore

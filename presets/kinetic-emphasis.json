@@ -1,0 +1,45 @@
+{
+  "id": "kinetic-emphasis",
+  "technique": "T2",
+  "kind": "parametric",
+  "entrance": {
+    "type": "per-word-variety",
+    "pool": [
+      "scale-pop",
+      "blur-in",
+      "slide-up-mask",
+      "typewriter",
+      "glitch-slice"
+    ],
+    "frames": 8,
+    "ease": "outCubic",
+    "rule": "never the same entrance twice in a row"
+  },
+  "exit": {
+    "type": "scale-down-fade",
+    "frames": 5,
+    "ease": "inCubic"
+  },
+  "style": {
+    "connector_words": {
+      "size": "small",
+      "colour": "#FFFFFF"
+    },
+    "key_words": {
+      "size": "xl",
+      "colour": "accent",
+      "weight": "black"
+    }
+  },
+  "assets": {
+    "search": "letters paper",
+    "kinds": [
+      "Animated Letters Pack",
+      "Paper effects"
+    ]
+  },
+  "source": "references/sorted/video-finished/Video-42028/sheet.jpg, Video-95528/sheet.jpg, Video-86514/sheet.jpg",
+  "copy_rule": "style-only",
+  "confidence": "low",
+  "note": "Inferred from contact sheets + motion bursts; timings in frames @30 fps; refine on first live render."
+}
