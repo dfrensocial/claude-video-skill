@@ -38,3 +38,12 @@ references/inbox/
 # the user's OWN reels, stored through Git LFS
 !own-reels/
 !own-reels/*.mp4
+
+graphics/renders/
+graphics/jobs/
+graphics/node_modules/
+
+# graphics card fonts (Bebas Neue + Montserrat, OFL) must travel with the repo
+!graphics/assets/
+!graphics/assets/fonts/
+!graphics/assets/fonts/*

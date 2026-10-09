@@ -2,7 +2,7 @@
   "mode": "autopilot",
   "library": {
     "broll_paths": [],
-    "sfx_paths": [],
+    "sfx_paths": ["E:/video editor claude/library/sfx"],
     "music_paths": [],
     "assets_paths": ["E:/video editor claude/assets/asserss"]
   },

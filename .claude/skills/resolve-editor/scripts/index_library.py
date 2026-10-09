@@ -28,7 +28,7 @@ KIND_EXT = {"broll": VIDEO_EXT | {".gif"}, "sfx": AUDIO_EXT, "music": AUDIO_EXT,
 KEY = {"broll": "broll_paths", "sfx": "sfx_paths", "music": "music_paths", "assets": "assets_paths"}
 SPLIT = re.compile(r"[^A-Za-z0-9]+|(?<=[a-z])(?=[A-Z])")
 EXPORT_STAMP = re.compile(r"^\d{8}t\d{6}z$")  # Google-Drive zip suffix, e.g. -20241225T142251Z-001
-ALPHA_FMTS = ("rgba", "bgra", "argb", "abgr", "yuva", "ya8", "ya16", "gbrap", "pal8")
+ALPHA_FMTS = ("rgba", "bgra", "argb", "abgr", "yuva", "ya8", "ya16", "gbrap")  # pal8 (GIF) cannot tell: judged by corners
 # folder/name words that mean "black or green background, composite with a blend mode / key" -> hint only
 SCREEN_WORDS = {"grain", "burn", "leak", "leaks", "glow", "overlay", "overlays", "sparkle", "smoke", "fire", "dust",
                 "explosion", "blast", "light", "lights", "flare", "bokeh", "particles"}
@@ -66,8 +66,9 @@ def asset_facts(path, rel, s, folder, name):
     if ext == ".cube":
         return {"category": cat, "asset_type": "lut", "alpha": False, "blend": None}
     pix = (s.get("pix_fmt") or "").lower()
-    alpha = pix.startswith(ALPHA_FMTS)
     atype = "image" if ext in IMAGE_EXT else "video"
+    # a pixel format with an alpha plane is only a hint (the GIF decoder reports bgra for opaque GIFs): check real pixels
+    alpha = pix.startswith(ALPHA_FMTS) and real_alpha(path, s.get("duration") or 0)
     bg = None
     if alpha:
         blend = "normal"          # real transparency: place on V3/V4 as is
@@ -79,6 +80,23 @@ def asset_facts(path, rel, s, folder, name):
     else:
         blend = "normal"
     return {"category": cat, "asset_type": atype, "alpha": bool(alpha), "blend": blend, "bg": bg}
+
+
+def real_alpha(path, duration):
+    """True if a frame of the file really contains transparent pixels (checks two points in time)."""
+    try:
+        import subprocess
+        from PIL import Image
+        for frac in (0.15, 0.5):
+            tmp = Path(tempfile.mkdtemp()) / "a.png"
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", f"{duration * frac:.3f}", "-i", str(path), "-frames:v", "1",
+                            "-vf", "scale=96:-1,format=rgba", str(tmp)], check=True, capture_output=True)
+            a = Image.open(tmp).convert("RGBA").getchannel("A")
+            if a.getextrema()[0] < 245:
+                return True
+        return False
+    except Exception:  # noqa: BLE001
+        return True  # cannot tell: trust the pixel format
 
 
 def corner_background(path, duration):

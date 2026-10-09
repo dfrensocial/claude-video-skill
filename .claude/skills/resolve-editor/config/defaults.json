@@ -43,8 +43,10 @@
       "bound_gap": 1.5,
       "min_silence_ratio": 0.05
     },
-    "fillers_cut": ["um", "umm", "uh", "uhh", "er", "erm", "hmm", "hm", "mm", "mmm", "ah", "ahh"],
-    "fillers_flag": ["like", "basically", "actually", "literally", "you know", "so", "okay", "right"],
+    "fillers_cut": ["um", "umm", "uh", "uhh", "er", "erm", "hmm", "hm", "mm", "mmm", "ah", "ahh",
+                    "ம்", "ம்ம்", "ஹ்ம்", "ஹ்ம்ம்", "உம்", "அம்", "ஆஹ்", "ஹ்", "mmm", "hmmm"],
+    "fillers_flag": ["like", "basically", "actually", "literally", "you know", "so", "okay", "right",
+                     "வந்து", "அதாவது", "அப்புறம்", "பேசிக்கலி", "ஆக்சுவலி", "சோ", "ஓகே", "vandhu", "vanthu", "apram", "appuram", "adhavadhu", "athavathu"],
     "cue_phrases": [
       "sorry", "again", "one more time", "once more", "let me start again", "start again",
       "let me redo", "redo", "retake", "take two", "take 2", "cut", "my bad", "hold on", "wait", "no no"

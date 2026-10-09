@@ -105,6 +105,12 @@ def check(path, expect_res=None, expect_fps=None, expect_dur=None, lufs=None, cf
             "none" if not mid else "; ".join(f"{s['start']:.1f}-{s['end']:.1f}s" for s in mid))
         add("lead/tail silence", "PASS" if not (lead or tail) else "WARN",
             "ok" if not (lead or tail) else f"lead {len(lead)} tail {len(tail)}")
+        # digital silence (true zero) between 40 ms and the dead-air limit = a cut with no room tone under it
+        dsil = silence(path, -80.0, 0.04)["silence"]
+        dmid = [s for s in dsil if s["start"] > 0.3 and s["end"] < dur - 0.3 and s["end"] - s["start"] < q["mid_silence_max"]]
+        add("digital silence at cuts", "PASS" if not dmid else "WARN",
+            "none" if not dmid else f"{len(dmid)} spot(s), e.g. " + "; ".join(f"{s['start']:.2f}s" for s in dmid[:4])
+            + " (add room tone / J-cut overlap under the join)")
     if info["has_video"]:
         bl = black_intervals(path, q["black_min_dur"])
         dur = info["duration"]

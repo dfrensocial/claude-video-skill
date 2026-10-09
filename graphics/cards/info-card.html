@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"kicker","type":"string","label":"Small header (caps)","default":"THEY GROW BY"},
+    {"id":"headline_a","type":"string","label":"Headline, first part","default":"Copying your"},
+    {"id":"headline_key","type":"string","label":"Headline key phrase (accent)","default":"Product"},
+    {"id":"body1","type":"string","label":"Body line 1 (optional)","default":""},
+    {"id":"body2","type":"string","label":"Body line 2 (optional)","default":""},
+    {"id":"body3","type":"string","label":"Body line 3 (optional)","default":""},
+    {"id":"text","type":"color","label":"Text colour","default":"#111111"},
+    {"id":"accent","type":"color","label":"Accent for key phrase","default":"#C8171E"},
+    {"id":"plate","type":"color","label":"Plate colour","default":"#E8AA05"},
+    {"id":"plate_mode","type":"string","label":"full (opaque scene) | card (rounded floating) | none","default":"full"},
+    {"id":"show_s","type":"number","label":"Seconds on screen before exit","default":3.2},
+    {"id":"y_pct","type":"number","label":"Content vertical centre, % of height","default":40}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "MontserratBold"; src: url("../assets/fonts/Montserrat-Bold.otf"); }
+      @font-face { font-family: "MontserratBlack"; src: url("../assets/fonts/Montserrat-Black.otf"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #root { position: relative; width: 100%; height: 100%; background: transparent; }
+      #plate { position: absolute; inset: 0; opacity: 0; }
+      #plate.card { inset: 420px 90px 520px; border-radius: 64px; box-shadow: 0 40px 90px rgba(0,0,0,.35); }
+      #plate.full::after { content: ""; position: absolute; inset: 0;
+        background: repeating-linear-gradient(135deg, rgba(0,0,0,.06) 0 38px, rgba(0,0,0,0) 38px 76px); }
+      #content { position: absolute; left: 90px; right: 90px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px; }
+      #kicker { font-family: "MontserratBold", sans-serif; font-size: 38px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0; }
+      #head { font-family: "MontserratBlack", sans-serif; font-size: 112px; line-height: 1.04; letter-spacing: -0.01em; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 26px; }
+      .w { display: inline-block; opacity: 0; }
+      #key { position: relative; display: inline-block; }
+      #key::after { content: ""; position: absolute; left: -8px; right: -8px; bottom: 6px; height: 22px; background: currentColor; opacity: .18; border-radius: 6px; transform-origin: left; transform: scaleX(var(--u, 0)); }
+      .body { font-family: "MontserratBold", sans-serif; font-size: 48px; line-height: 1.25; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="info-card" data-start="0" data-duration="6" data-width="1080" data-height="1920">
+      <div class="clip" data-start="0" data-duration="6" data-track-index="0" style="position:absolute;inset:0">
+        <div id="plate"></div>
+        <div id="content">
+          <div id="kicker"></div>
+          <div id="head"></div>
+          <div id="b1" class="body"></div>
+          <div id="b2" class="body"></div>
+          <div id="b3" class="body"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const V = window.__hyperframes.getVariables();
+      const $ = (id) => document.getElementById(id);
+      const mode = String(V.plate_mode || "full");
+      $("plate").className = mode;
+      $("plate").style.background = mode === "none" ? "transparent" : V.plate;
+      $("content").style.top = V.y_pct + "%";
+      $("content").style.transform = "translateY(-50%)";
+      $("content").style.color = V.text;
+      $("kicker").textContent = V.kicker;
+      $("kicker").style.opacity = V.kicker ? 0 : 0;
+      const head = $("head");
+      const words = [];
+      String(V.headline_a || "").split(/\s+/).filter(Boolean).forEach((t) => {
+        const s = document.createElement("span"); s.className = "w"; s.textContent = t; head.appendChild(s); words.push(s);
+      });
+      if (V.headline_key) {
+        const k = document.createElement("span"); k.className = "w"; k.id = "key"; k.textContent = V.headline_key; k.style.color = V.accent; head.appendChild(k); words.push(k);
+      }
+      ["body1", "body2", "body3"].forEach((id, i) => { $("b" + (i + 1)).textContent = V[id] || ""; });
+      const bodies = ["b1", "b2", "b3"].filter((id) => $(id).textContent);
+      const show = Math.max(1.8, Number(V.show_s));
+      const tl = gsap.timeline({ paused: true });
+      if (mode !== "none") tl.fromTo("#plate", { opacity: 0, scale: mode === "card" ? 0.92 : 1 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+      if (V.kicker) tl.fromTo("#kicker", { opacity: 0, y: -20 }, { opacity: 0.8, y: 0, duration: 0.35, ease: "power3.out" }, 0.1);
+      words.forEach((w, i) => tl.fromTo(w, { opacity: 0, y: 36, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: "back.out(1.8)" }, 0.22 + i * 0.12));
+      if (V.headline_key) tl.to("#key", { "--u": 1, duration: 0.5, ease: "power3.out" }, 0.22 + (words.length - 1) * 0.12 + 0.15);
+      bodies.forEach((id, i) => tl.fromTo("#" + id, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.7 + i * 0.18));
+      tl.to("#content", { opacity: 0, y: -50, duration: 0.35, ease: "power2.in" }, show);
+      if (mode !== "none") tl.to("#plate", { opacity: 0, duration: 0.3, ease: "power2.in" }, show + 0.05);
+      window.__timelines["info-card"] = tl;
+    </script>
+  </body>
+</html>

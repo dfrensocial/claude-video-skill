@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"kicker","type":"string","label":"Small header","default":"BUT A COPY CAN NEVER MATCH"},
+    {"id":"title","type":"string","label":"Title","default":"Quality & Standard"},
+    {"id":"left_label","type":"string","label":"Left label","default":"ORIGINAL"},
+    {"id":"left_value","type":"number","label":"Left bar 0-100","default":96},
+    {"id":"left_text","type":"string","label":"Left caption","default":"QUALITY 96%"},
+    {"id":"right_label","type":"string","label":"Right label","default":"COPY"},
+    {"id":"right_value","type":"number","label":"Right bar 0-100","default":34},
+    {"id":"right_text","type":"string","label":"Right caption","default":"QUALITY 34%"},
+    {"id":"left_color","type":"color","label":"Left (good) colour","default":"#1DB954"},
+    {"id":"right_color","type":"color","label":"Right (bad) colour","default":"#C8171E"},
+    {"id":"text","type":"color","label":"Text colour","default":"#111111"},
+    {"id":"card","type":"color","label":"Card colour","default":"#FFFFFF"},
+    {"id":"plate","type":"color","label":"Plate colour","default":"#E8AA05"},
+    {"id":"plate_mode","type":"string","label":"full | none","default":"full"},
+    {"id":"show_s","type":"number","label":"Seconds on screen before exit","default":3.6},
+    {"id":"y_pct","type":"number","label":"Vertical centre, % of height","default":42}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "MontserratBold"; src: url("../assets/fonts/Montserrat-Bold.otf"); }
+      @font-face { font-family: "MontserratBlack"; src: url("../assets/fonts/Montserrat-Black.otf"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #root { position: relative; width: 100%; height: 100%; background: transparent; }
+      #plate { position: absolute; inset: 0; opacity: 0; }
+      #plate.full::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.06) 0 38px, rgba(0,0,0,0) 38px 76px); }
+      #content { position: absolute; left: 70px; right: 70px; display: flex; flex-direction: column; align-items: center; gap: 36px; }
+      #kicker { font-family: "MontserratBold", sans-serif; font-size: 34px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0; text-align: center; }
+      #title { font-family: "MontserratBlack", sans-serif; font-size: 84px; line-height: 1.05; text-align: center; opacity: 0; }
+      #row { position: relative; display: flex; gap: 40px; align-items: stretch; }
+      .c { width: 440px; border-radius: 44px; padding: 36px 34px 40px; display: flex; flex-direction: column; gap: 22px; opacity: 0; box-shadow: 0 30px 70px rgba(0,0,0,.28); }
+      .tag { font-family: "MontserratBlack", sans-serif; font-size: 34px; letter-spacing: 0.16em; text-align: center; }
+      .pic { height: 150px; border-radius: 26px; display: flex; align-items: center; justify-content: center; font-family: "MontserratBlack", sans-serif; font-size: 96px; background: rgba(0,0,0,.06); }
+      .cap { font-family: "MontserratBold", sans-serif; font-size: 34px; letter-spacing: 0.12em; }
+      .track { height: 26px; border-radius: 13px; background: rgba(0,0,0,.12); overflow: hidden; }
+      .fill { height: 100%; width: 0; border-radius: 13px; }
+      #vs { position: absolute; left: 50%; top: 50%; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; font-family: "MontserratBlack", sans-serif; font-size: 34px; opacity: 0; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="compare-card" data-start="0" data-duration="6" data-width="1080" data-height="1920">
+      <div class="clip" data-start="0" data-duration="6" data-track-index="0" style="position:absolute;inset:0">
+        <div id="plate"></div>
+        <div id="content">
+          <div id="kicker"></div>
+          <div id="title"></div>
+          <div id="row">
+            <div class="c" id="cl"><div class="tag" id="ll"></div><div class="pic" id="pl">✓</div><div class="cap" id="tl"></div><div class="track"><div class="fill" id="fl"></div></div></div>
+            <div class="c" id="cr"><div class="tag" id="lr"></div><div class="pic" id="pr">✗</div><div class="cap" id="tr"></div><div class="track"><div class="fill" id="fr"></div></div></div>
+            <div id="vs">VS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const V = window.__hyperframes.getVariables();
+      const $ = (id) => document.getElementById(id);
+      const mode = String(V.plate_mode || "full");
+      $("plate").className = mode;
+      $("plate").style.background = mode === "none" ? "transparent" : V.plate;
+      $("content").style.top = V.y_pct + "%";
+      $("content").style.transform = "translateY(-50%)";
+      $("content").style.color = V.text;
+      $("kicker").textContent = V.kicker;
+      $("title").textContent = V.title;
+      ["cl", "cr"].forEach((id) => { $(id).style.background = V.card; $(id).style.color = "#111"; });
+      $("ll").textContent = V.left_label; $("lr").textContent = V.right_label;
+      $("tl").textContent = V.left_text; $("tr").textContent = V.right_text;
+      $("ll").style.color = V.left_color; $("lr").style.color = V.right_color;
+      $("pl").style.color = V.left_color; $("pr").style.color = V.right_color;
+      $("fl").style.background = V.left_color; $("fr").style.background = V.right_color;
+      const show = Math.max(2.4, Number(V.show_s));
+      const clamp = (x) => Math.max(0, Math.min(100, Number(x)));
+      const tl = gsap.timeline({ paused: true });
+      if (mode !== "none") tl.fromTo("#plate", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#kicker", { opacity: 0, y: -20 }, { opacity: 0.8, y: 0, duration: 0.35, ease: "power3.out" }, 0.1);
+      tl.fromTo("#title", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 0.2);
+      tl.fromTo("#cl", { opacity: 0, x: -80, rotate: -4 }, { opacity: 1, x: 0, rotate: 0, duration: 0.5, ease: "back.out(1.5)" }, 0.5);
+      tl.fromTo("#cr", { opacity: 0, x: 80, rotate: 4 }, { opacity: 1, x: 0, rotate: 0, duration: 0.5, ease: "back.out(1.5)" }, 0.62);
+      tl.fromTo("#vs", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" }, 0.95);
+      tl.to("#fl", { width: clamp(V.left_value) + "%", duration: 0.9, ease: "power3.out" }, 1.0);
+      tl.to("#fr", { width: clamp(V.right_value) + "%", duration: 0.9, ease: "power3.out" }, 1.15);
+      tl.to("#content", { opacity: 0, y: -50, duration: 0.35, ease: "power2.in" }, show);
+      if (mode !== "none") tl.to("#plate", { opacity: 0, duration: 0.3, ease: "power2.in" }, show + 0.05);
+      window.__timelines["compare-card"] = tl;
+    </script>
+  </body>
+</html>

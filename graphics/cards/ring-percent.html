@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"kicker","type":"string","label":"Small header","default":"THERE IS A"},
+    {"id":"value","type":"number","label":"Percent 0-100","default":99},
+    {"id":"label_a","type":"string","label":"Caption line","default":"chance your business"},
+    {"id":"label_key","type":"string","label":"Caption key phrase (accent)","default":"CAN FAIL"},
+    {"id":"text","type":"color","label":"Text colour","default":"#111111"},
+    {"id":"accent","type":"color","label":"Ring + key phrase colour","default":"#C8171E"},
+    {"id":"plate","type":"color","label":"Plate colour","default":"#E8AA05"},
+    {"id":"plate_mode","type":"string","label":"full | card | none","default":"full"},
+    {"id":"show_s","type":"number","label":"Seconds on screen before exit","default":3.2},
+    {"id":"y_pct","type":"number","label":"Vertical centre, % of height","default":42}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "BebasNeue"; src: url("../assets/fonts/BebasNeue.otf"); }
+      @font-face { font-family: "MontserratBold"; src: url("../assets/fonts/Montserrat-Bold.otf"); }
+      @font-face { font-family: "MontserratBlack"; src: url("../assets/fonts/Montserrat-Black.otf"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #root { position: relative; width: 100%; height: 100%; background: transparent; }
+      #plate { position: absolute; inset: 0; opacity: 0; }
+      #plate.card { inset: 380px 110px 480px; border-radius: 64px; box-shadow: 0 40px 90px rgba(0,0,0,.35); }
+      #plate.full::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(0,0,0,.06) 0 38px, rgba(0,0,0,0) 38px 76px); }
+      #content { position: absolute; left: 90px; right: 90px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 30px; }
+      #kicker { font-family: "MontserratBold", sans-serif; font-size: 38px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0; }
+      #ringwrap { position: relative; width: 560px; height: 560px; }
+      svg { width: 560px; height: 560px; transform: rotate(-90deg); }
+      #pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: "BebasNeue", sans-serif; font-size: 300px; line-height: 1; opacity: 0; }
+      #pct small { font-size: 120px; margin-left: 6px; align-self: flex-start; margin-top: 90px; }
+      #cap { font-family: "MontserratBold", sans-serif; font-size: 52px; line-height: 1.2; opacity: 0; }
+      #cap b { display: block; font-family: "MontserratBlack", sans-serif; font-size: 70px; margin-top: 6px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ring-percent" data-start="0" data-duration="6" data-width="1080" data-height="1920">
+      <div class="clip" data-start="0" data-duration="6" data-track-index="0" style="position:absolute;inset:0">
+        <div id="plate"></div>
+        <div id="content">
+          <div id="kicker"></div>
+          <div id="ringwrap">
+            <svg viewBox="0 0 200 200">
+              <circle id="track" cx="100" cy="100" r="88" fill="none" stroke-width="16"></circle>
+              <circle id="arc" cx="100" cy="100" r="88" fill="none" stroke-width="16" stroke-linecap="round"></circle>
+            </svg>
+            <div id="pct"><span id="n">0</span><small>%</small></div>
+          </div>
+          <div id="cap"><span id="la"></span><b id="lk"></b></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const V = window.__hyperframes.getVariables();
+      const $ = (id) => document.getElementById(id);
+      const mode = String(V.plate_mode || "full");
+      $("plate").className = mode;
+      $("plate").style.background = mode === "none" ? "transparent" : V.plate;
+      $("content").style.top = V.y_pct + "%";
+      $("content").style.transform = "translateY(-50%)";
+      $("content").style.color = V.text;
+      $("kicker").textContent = V.kicker;
+      $("la").textContent = V.label_a;
+      $("lk").textContent = V.label_key;
+      $("lk").style.color = V.accent;
+      $("track").setAttribute("stroke", "rgba(0,0,0,0.12)");
+      $("arc").setAttribute("stroke", V.accent);
+      const C = 2 * Math.PI * 88;
+      $("arc").setAttribute("stroke-dasharray", C);
+      $("arc").setAttribute("stroke-dashoffset", C);
+      const val = Math.max(0, Math.min(100, Number(V.value)));
+      const o = { v: 0 };
+      const show = Math.max(2.0, Number(V.show_s));
+      const tl = gsap.timeline({ paused: true });
+      if (mode !== "none") tl.fromTo("#plate", { opacity: 0, scale: mode === "card" ? 0.92 : 1 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+      if (V.kicker) tl.fromTo("#kicker", { opacity: 0, y: -20 }, { opacity: 0.8, y: 0, duration: 0.35, ease: "power3.out" }, 0.1);
+      tl.fromTo("#pct", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 0.2);
+      tl.to("#arc", { attr: { "stroke-dashoffset": C * (1 - val / 100) }, duration: 1.1, ease: "power3.out" }, 0.25);
+      tl.to(o, { v: val, duration: 1.1, ease: "power3.out", onUpdate: () => { $("n").textContent = Math.round(o.v); } }, 0.25);
+      tl.fromTo("#cap", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.95);
+      tl.to("#content", { opacity: 0, y: -50, duration: 0.35, ease: "power2.in" }, show);
+      if (mode !== "none") tl.to("#plate", { opacity: 0, duration: 0.3, ease: "power2.in" }, show + 0.05);
+      window.__timelines["ring-percent"] = tl;
+    </script>
+  </body>
+</html>
