@@ -654,6 +654,74 @@
       "created": "2026-10-09T10:06:08+00:00",
       "updated": "2026-10-09T10:06:08+00:00",
       "props": {}
+    },
+    "rule:the-first-edit-was-messy-text-was-small-clipped--63": {
+      "type": "rule",
+      "label": "The first edit was messy: text was small, clipped and doubled, nothing like the ",
+      "w": 2.0,
+      "uses": 0,
+      "created": "2026-10-09T10:53:32+00:00",
+      "updated": "2026-10-09T10:53:32+00:00",
+      "props": {
+        "text": "The first edit was messy: text was small, clipped and doubled, nothing like the reference videos. Text must be big, bold, auto-fitted inside the frame, one phrase at a time (no overlapping), with varied entrance and exit animations per word, like the references.",
+        "scope": "global",
+        "polarity": "do",
+        "targets": [],
+        "params": {
+          "typography.min_size": "large",
+          "typography.autofit": true,
+          "typography.no_overlap": true
+        },
+        "count": 1,
+        "status": "active",
+        "evidence": [
+          "The first edit was messy: text was small, clipped and doubled, nothing like the reference videos. Text must be big, bold, auto-fitted inside the frame, one phrase at a time (no overlapping), with varied entrance and exit animations per word, like the references."
+        ]
+      }
+    },
+    "rule:when-asked-for-a-great-edit-use-many-transitions-64": {
+      "type": "rule",
+      "label": "When asked for a great edit: use many transitions (real fire wipes, flame licks,",
+      "w": 2.0,
+      "uses": 0,
+      "created": "2026-10-09T10:53:32+00:00",
+      "updated": "2026-10-09T10:53:32+00:00",
+      "props": {
+        "text": "When asked for a great edit: use many transitions (real fire wipes, flame licks, glitch cuts, flashes), many animated text entries/exits, camera punch-ins on key words, sound design, and a strong grade. Be creative and dense.",
+        "scope": "global",
+        "polarity": "do",
+        "targets": [],
+        "params": {
+          "edit.density": "high"
+        },
+        "count": 1,
+        "status": "active",
+        "evidence": [
+          "When asked for a great edit: use many transitions (real fire wipes, flame licks, glitch cuts, flashes), many animated text entries/exits, camera punch-ins on key words, sound design, and a strong grade. Be creative and dense."
+        ]
+      }
+    },
+    "rule:do-not-rely-on-a-fixed-brand-colour-pick-colours-65": {
+      "type": "rule",
+      "label": "Do not rely on a fixed brand colour: pick colours per video from the footage and",
+      "w": 2.0,
+      "uses": 0,
+      "created": "2026-10-09T10:53:32+00:00",
+      "updated": "2026-10-09T10:53:32+00:00",
+      "props": {
+        "text": "Do not rely on a fixed brand colour: pick colours per video from the footage and the references.",
+        "scope": "global",
+        "polarity": "do",
+        "targets": [],
+        "params": {
+          "palette.mode": "per_video"
+        },
+        "count": 1,
+        "status": "active",
+        "evidence": [
+          "Do not rely on a fixed brand colour: pick colours per video from the footage and the references."
+        ]
+      }
     }
   },
   "edges": {

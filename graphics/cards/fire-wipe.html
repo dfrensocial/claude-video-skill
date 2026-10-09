@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"dur","type":"number","label":"Seconds the wipe lasts (file is 3 s long)","default":1.2},
+    {"id":"dir","type":"string","label":"up | down | left | right","default":"up"},
+    {"id":"band","type":"number","label":"Flame band thickness (1.7 = full-screen cover for a moment)","default":1.7},
+    {"id":"seed","type":"number","label":"Noise seed","default":3},
+    {"id":"heat","type":"number","label":"0 red embers .. 1 white-hot","default":0.75}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #root { position: relative; width: 100%; height: 100%; background: transparent; }
+      canvas { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="fire-wipe" data-start="0" data-duration="3" data-width="1080" data-height="1920">
+      <div class="clip" data-start="0" data-duration="3" data-track-index="0" style="position:absolute;inset:0">
+        <canvas id="c" width="1080" height="1920"></canvas>
+      </div>
+    </div>
+    <script>
+      const V = window.__hyperframes.getVariables();
+      const cv = document.getElementById("c");
+      const gl = cv.getContext("webgl", { alpha: true, premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: false });
+      const vs = `attribute vec2 p; varying vec2 uv; void main(){ uv = p*0.5+0.5; gl_Position = vec4(p,0.,1.); }`;
+      const fs = `
+      precision highp float;
+      varying vec2 uv;
+      uniform float uP, uT, uBand, uSeed, uHeat;
+      uniform int uDir;
+      float hash(vec2 p){ p = fract(p*vec2(123.34, 456.21)); p += dot(p, p+45.32); return fract(p.x*p.y); }
+      float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
+      float fbm(vec2 p){ float a=.5, s=0.; for(int i=0;i<6;i++){ s+=a*noise(p); p=p*2.03+vec2(7.1,3.3); a*=.5; } return s; }
+      vec3 ramp(float h){            // heat -> colour: ember red, orange, yellow, white-hot
+        vec3 c = vec3(0.0);
+        c = mix(c, vec3(0.55,0.03,0.0), smoothstep(0.05,0.30,h));
+        c = mix(c, vec3(1.00,0.30,0.0), smoothstep(0.25,0.55,h));
+        c = mix(c, vec3(1.00,0.72,0.12), smoothstep(0.50,0.80,h));
+        c = mix(c, vec3(1.00,0.97,0.78), smoothstep(0.78,1.05,h));
+        return c;
+      }
+      void main(){
+        vec2 q = uv;                       // 0..1, y up
+        float s = q.y;                     // distance along the sweep direction
+        float cross = q.x;
+        if (uDir == 1) { s = 1.0 - q.y; }
+        if (uDir == 2) { s = 1.0 - q.x; cross = q.y; }
+        if (uDir == 3) { s = q.x; cross = q.y; }
+        float aspect = 1920.0/1080.0;
+        // upward-streaking flame noise (stretched along the sweep axis, scrolling toward it)
+        // tall, narrow flame tongues: noise stretched along the sweep axis and scrolling the same way (flames rise)
+        float sx = cross*(uDir<2?1.0:aspect);
+        vec2 np = vec2(sx*5.0, s*0.85 - uT*3.1 + uSeed);
+        float n1 = fbm(np);
+        float n2 = fbm(vec2(sx*11.0 + 3.7, s*1.7 - uT*5.2));          // finer licking detail
+        float n3 = fbm(vec2(sx*2.2 - 1.3, s*0.5 - uT*1.1 + uSeed));   // slow large-scale billow
+        float n = 0.5*n1 + 0.28*n2 + 0.22*n3;
+        float a = mix(-0.22, 1.0 + uBand + 0.18, uP);   // leading edge position
+        float b = a - uBand;                              // trailing edge position
+        float tongue = (n1 - 0.5) * 0.85 + (n2 - 0.5) * 0.35;           // ragged, flame-shaped leading edge
+        float lead  = a - s + tongue;
+        float trail = s - b + (0.5 - n3) * 0.5 + (0.5 - n2) * 0.2;
+        float body  = smoothstep(-0.02, 0.22, lead) * smoothstep(0.0, 0.22, trail);
+        float edge  = 1.0 - smoothstep(0.0, 0.50, lead);       // near the leading edge: brighter
+        float tail  = 1.0 - smoothstep(0.0, 0.55, trail);      // near the trailing edge: cooling to red/dark
+        // heat: orange/yellow body, white only in the hottest cores
+        float core = smoothstep(0.55, 0.9, n2 * 0.6 + n1 * 0.5 + edge * 0.35);
+        float h = (0.28 + 0.62*n + 0.30*edge - 0.50*tail + 0.28*core) * mix(0.82, 1.08, uHeat);
+        h = clamp(h, 0.0, 1.05);
+        float flick = 0.94 + 0.06*sin(uT*41.0 + n*11.0);
+        vec3 col = ramp(h*flick) * (0.78 + 0.5*n2);
+        float alpha = clamp(body * (0.62 + 0.9*h), 0.0, 1.0);
+        // dark smoky streaks in the trailing region and light thrown ahead of the front
+        float smoke = smoothstep(0.55, 0.9, tail) * (1.0 - n1) * 0.45;
+        col *= (1.0 - smoke);
+        float glow = exp(-max(-lead, 0.0)*4.2) * step(lead, 0.0) * 0.34 * (1.0 - uP*0.3);
+        float ga = glow * (1.0 - alpha);
+        vec3 outc = col*alpha + vec3(1.0,0.42,0.04)*ga;
+        float outa = clamp(alpha + ga, 0.0, 1.0);
+        gl_FragColor = vec4(outc, outa);      // premultiplied
+      }`;
+      function sh(type, src) { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog); gl.useProgram(prog);
+      const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      const U = (n) => gl.getUniformLocation(prog, n);
+      const dirIdx = { up: 0, down: 1, left: 2, right: 3 }[String(V.dir)] ?? 0;
+      function draw(p, t) {
+        gl.viewport(0, 0, 1080, 1920);
+        gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform1f(U("uP"), p); gl.uniform1f(U("uT"), t); gl.uniform1f(U("uBand"), Number(V.band));
+        gl.uniform1f(U("uSeed"), Number(V.seed)); gl.uniform1f(U("uHeat"), Number(V.heat)); gl.uniform1i(U("uDir"), dirIdx);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      const o = { p: 0 };
+      const D = Math.max(0.3, Number(V.dur));
+      const tl = gsap.timeline({ paused: true });
+      tl.to(o, { p: 1, duration: D, ease: "power1.inOut", onUpdate: () => draw(o.p, tl.time()) }, 0);
+      tl.set(o, { p: 1 }, D);
+      tl.call(() => draw(1.0, tl.time()), null, D + 0.01);
+      draw(0, 0);
+      window.__timelines["fire-wipe"] = tl;
+    </script>
+  </body>
+</html>

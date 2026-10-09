@@ -6,7 +6,7 @@
                      [--out file.mov] [--format mov|webm|mp4] [--quality draft|looks|delivery] [--show-s 3.0]
   graphics.py batch jobs.json                       [{"template":..., "vars":{...}, "out":...}, ...] rendered one by one
 
-Templates: count-up, info-card, ring-percent, compare-card (each 1080x1920, transparent background unless plate_mode=full).
+Templates: count-up, info-card, ring-percent, compare-card (each 1080x1920, transparent background unless plate_mode=full), fire-wipe (WebGL flame transition; dur/dir/band/seed/heat), typo (one kinetic-typography + HUD layer from a JSON events list; see references/director-playbook.md).
 Colours: pass --palette (palette.py output) and --option N to fill text/accent/plate; explicit --var values win.
 Output: a transparent ProRes 4444 .mov (default) that compose.py places as a `normal` overlay, or webm/mp4.
 Rules: every number/claim comes from the brief verbatim (never invent statistics); `grouping` = western|indian for digits;

@@ -74,10 +74,87 @@ def grade_chain(g):
 
 def vf_clip(i, c, W, H, fps):
     z = float(c.get("zoom", 1.0))
-    sc = f"scale={W}:{H}:force_original_aspect_ratio=increase"
+    # lanczos for upscaling low-res phone footage; per-clip sharpen is applied later in `finish` on the final frame size
+    sc = f"scale={W}:{H}:force_original_aspect_ratio=increase:flags=lanczos"
     if z > 1.001:
-        sc = f"scale=iw*{z}:ih*{z}:force_original_aspect_ratio=increase,scale='max({W},iw)':'max({H},ih)'"
-    return f"[{i}:v]{sc},crop={W}:{H},setsar=1,fps={fps},format=yuv420p[v{i}]"
+        sc = f"scale=iw*{z}:ih*{z}:force_original_aspect_ratio=increase:flags=lanczos,scale='max({W},iw)':'max({H},ih)':flags=lanczos"
+    spd = float(c.get("speed", 1.0))
+    sp = f"setpts=(PTS-STARTPTS)/{spd},"  # speed < 1 = slow motion; with a 60 fps source every frame is used at 30 fps output
+    return f"[{i}:v]{sp}{sc},crop={W}:{H},setsar=1,fps={fps},format=yuv420p[v{i}]"
+
+
+def camera_filters(spec, W, H):
+    """Animated 'virtual camera': slow zoom keyframes + beat pulses + shake, as scale(eval=frame)+crop expressions.
+
+    spec["camera"] = {"zoom": [[t,z],...] piecewise-linear base zoom, "pulses": [{"t","amp","decay"}] punch-in on a beat that
+    relaxes (amp 0.12 = +12 %), "shake": [{"t","dur","amp","freq"}] handheld impact shake in pixels}. Returns filter strings or []."""
+    cam = spec.get("camera")
+    if not cam:
+        return []
+    kf = cam.get("zoom") or [[0, 1.0]]
+    base = f"{kf[-1][1]}"
+    for (t0, z0), (t1, z1) in reversed(list(zip(kf, kf[1:]))):
+        seg = f"({z0}+({z1}-{z0})*(t-{t0})/{max(t1 - t0, 1e-3)})"
+        base = f"if(lt(t,{t1}),if(lt(t,{t0}),{z0},{seg}),{base})"
+    if len(kf) == 1:
+        base = f"{kf[0][1]}"
+    pulses = "".join(f"+{p.get('amp', 0.1)}*exp(-{p.get('decay', 7)}*(t-{p['t']}))*gte(t,{p['t']})" for p in cam.get("pulses", []))
+    z = f"({base}{pulses})"
+    sx = "".join(f"+{s.get('amp', 12)}*exp(-{s.get('decay', 9)}*(t-{s['t']}))*gte(t,{s['t']})*lt(t,{s['t'] + s.get('dur', 0.4)})"
+                 f"*sin(t*{s.get('freq', 47)}+{1.3 * (k + 1)})" for k, s in enumerate(cam.get("shake", [])))
+    sy = "".join(f"+{s.get('amp', 12)}*exp(-{s.get('decay', 9)}*(t-{s['t']}))*gte(t,{s['t']})*lt(t,{s['t'] + s.get('dur', 0.4)})"
+                 f"*sin(t*{s.get('freq', 47) * 1.37}+{2.1 * (k + 1)})" for k, s in enumerate(cam.get("shake", [])))
+    return [f"scale=w='trunc(iw*{z}/2)*2':h='trunc(ih*{z}/2)*2':eval=frame:flags=bicubic",
+            f"crop={W}:{H}:x='(iw-{W})/2{sx}':y='(ih-{H})/2{sy}'"]
+
+
+def fx_filters(spec):
+    """Time-window effects on the main picture (before overlays): rgbsplit, blur, flash (stepped brightness), negate, shake via camera."""
+    out = []
+    for f in spec.get("fx", []):
+        a, b = float(f["t"]), float(f["t"]) + float(f.get("dur", 0.2))
+        en = f"enable='between(t,{a:.3f},{b:.3f})'"
+        k = f["type"]
+        if k == "rgbsplit":
+            px = int(f.get("px", 8))
+            out.append(f"rgbashift=rh={px}:bh={-px}:rv={px // 3}:bv={-px // 3}:{en}")
+        elif k == "blur":
+            out.append(f"boxblur=luma_radius={int(f.get('px', 10))}:luma_power=1:chroma_radius={int(f.get('px', 10)) // 2}:{en}")
+        elif k == "negate":
+            out.append(f"negate=negate_alpha=0:{en}")
+        elif k == "flash":
+            amp, steps = float(f.get("amp", 0.8)), int(f.get("steps", 4))
+            fr = float(f.get("dur", 0.16)) / steps
+            for i in range(steps):
+                a2, b2 = float(f["t"]) + i * fr, float(f["t"]) + (i + 1) * fr
+                out.append(f"eq=brightness={amp * (1 - i / steps) ** 1.6:.3f}:contrast={1 + 0.4 * (1 - i / steps):.2f}:"
+                           f"enable='between(t,{a2:.3f},{b2:.3f})'")
+        elif k == "tint":
+            out.append(f"colorchannelmixer=rr=1.0:gg={f.get('g', 0.6)}:bb={f.get('b', 0.3)}:{en}")
+        elif k == "grade":
+            # a grade change that starts at t and lasts dur (use a big dur for 'from now on'): warm/cool balance, saturation,
+            # brightness, contrast, optional blur: e.g. the hot look after the fire hit, a dimmed backdrop for the end card
+            cb = {key: f.get(key) for key in ("rs", "gs", "bs", "rm", "gm", "bm", "rh", "gh", "bh") if f.get(key) is not None}
+            if cb:
+                out.append("colorbalance=" + ":".join(f"{kk}={vv}" for kk, vv in cb.items()) + f":{en}")
+            if any(f.get(key) is not None for key in ("sat", "brightness", "contrast", "gamma")):
+                out.append(f"eq=saturation={f.get('sat', 1.0)}:brightness={f.get('brightness', 0.0)}:contrast={f.get('contrast', 1.0)}:"
+                           f"gamma={f.get('gamma', 1.0)}:{en}")
+            if f.get("blur"):
+                out.append(f"boxblur=luma_radius={int(f['blur'])}:luma_power=1:{en}")
+    return out
+
+
+def finish_filters(spec):
+    fin = spec.get("finish") or {}
+    out = []
+    if fin.get("sharpen"):
+        out.append(f"unsharp=5:5:{float(fin['sharpen']):.2f}:5:5:0.0")
+    if fin.get("vignette"):
+        out.append(f"vignette=angle=PI/{float(fin['vignette']):.2f}")
+    if fin.get("grain"):
+        out.append(f"noise=alls={int(fin['grain'])}:allf=t+u")
+    return out
 
 
 def total_duration(spec):
@@ -97,7 +174,12 @@ def build_video(spec, preview, tmpdir):
         chains.append(vf_clip(i, c, W, H, fps))
     chains.append("".join(f"[v{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=0[vc]")
     last = "vc"
+    cam = camera_filters(spec, W, H)
+    if cam:
+        chains.append(f"[{last}]" + ",".join(cam) + ",format=yuv420p[vcam]")
+        last = "vcam"
     g = grade_chain(spec.get("grade"))
+    g = g + finish_filters(spec) + fx_filters(spec)
     if g:
         chains.append(f"[{last}]" + ",".join(g) + ",format=yuv420p[vg]")
         last = "vg"
@@ -109,10 +191,23 @@ def build_video(spec, preview, tmpdir):
         blend = ov.get("blend", "normal")
         if ov.get("loop"):
             cmd += ["-stream_loop", "-1"]
+        if ov.get("in"):
+            cmd += ["-ss", f"{float(ov['in']):.3f}"]
         cmd += ["-i", ov["file"]]
         s = f"[{idx}:v]"
         if dur:
-            s += f"trim=0:{dur},"
+            s += f"trim=0:{dur * float(ov.get('speed', 1.0)):.3f},"
+        if ov.get("speed") and float(ov["speed"]) != 1.0:
+            s += f"setpts=(PTS-STARTPTS)/{float(ov['speed'])},"
+        if ov.get("fps_in"):
+            s += f"fps={fps},"
+        fi, fo = float(ov.get("fade_in", 0)), float(ov.get("fade_out", 0))
+        if fi or fo:
+            s += "format=rgba,"
+            if fi:
+                s += f"fade=t=in:st=0:d={fi}:alpha=1,"
+            if fo and dur:
+                s += f"fade=t=out:st={max(dur - fo, 0):.3f}:d={fo}:alpha=1,"
         wf = float(ov.get("width_frac", 1.0 if blend in ("screen", "multiply") else 0.5))
         if blend in ("screen", "multiply"):
             # Build a timeline-long track that is neutral for the blend (black for screen, white for multiply), put the clip on
@@ -144,7 +239,12 @@ def build_video(spec, preview, tmpdir):
             x, y = ov.get("x", "center"), ov.get("y", "center")
             xe = "(W-w)/2" if x == "center" else str(x)
             ye = "(H-h)/2" if y == "center" else str(y)
-            chains.append(f"{s}setpts=PTS-STARTPTS+{start}/TB,scale=iw*0+{int(W * wf)}:-2,format=rgba,{key}format=rgba{opf}[o{k}]")
+            if ov.get("fit") == "cover":
+                scl = f"scale={W}:{H}:force_original_aspect_ratio=increase:flags=lanczos,crop={W}:{H}"
+                xe, ye = "0", "0"
+            else:
+                scl = f"scale=iw*0+{int(W * wf)}:-2"
+            chains.append(f"{s}setpts=PTS-STARTPTS+{start}/TB,{scl},format=rgba,{key}format=rgba{opf}[o{k}]")
             end = start + (dur or 3600)
             chains.append(f"[{last}][o{k}]overlay=x={xe}:y={ye}:enable='between(t,{start},{end})':eof_action=pass:format=auto,"
                           f"format=yuv420p[ov{k}]")
@@ -176,6 +276,8 @@ def build_audio(spec, tmpdir, total):
             has_a = probe_summary(c["src"])["has_audio"]
         except Exception:  # noqa: BLE001
             has_a = True
+        if c.get("mute"):
+            has_a = False
         if has_a:
             cmd += ["-ss", f"{float(c['in']):.3f}", "-t", f"{d:.3f}", "-i", c["src"]]
             chains.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo,afade=t=in:d=0.008,"
@@ -183,7 +285,9 @@ def build_audio(spec, tmpdir, total):
         else:
             cmd += ["-f", "lavfi", "-t", f"{d:.3f}", "-i", "anullsrc=r=48000:cl=stereo"]
             chains.append(f"[{i}:a]anull[a{i}]")
-    chains.append("".join(f"[a{i}]" for i in range(n)) + f"concat=n={n}:v=0:a=1[voice]")
+    vchain = spec.get("voice_chain")
+    chains.append("".join(f"[a{i}]" for i in range(n)) + f"concat=n={n}:v=0:a=1[voice0]")
+    chains.append(f"[voice0]{vchain}[voice]" if vchain else "[voice0]anull[voice]")
     idx = n
     mix = ["[voice]"]
     music = spec.get("music")
@@ -193,8 +297,10 @@ def build_audio(spec, tmpdir, total):
         chains.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},asetpts=PTS-STARTPTS,"
                       f"volume={float(music.get('gain_db', -20))}dB,afade=t=out:st={max(total - fo, 0):.3f}:d={fo}[mus]")
         if music.get("duck", True):
+            sc = music.get("sc") or {}  # gentler ducking for a sound-design bed: {"threshold":0.08,"ratio":2.5}
             chains.append("[voice]asplit=2[voice1][vsc]")
-            chains.append("[mus][vsc]sidechaincompress=threshold=0.04:ratio=9:attack=15:release=350:makeup=1[musd]")
+            chains.append(f"[mus][vsc]sidechaincompress=threshold={sc.get('threshold', 0.04)}:ratio={sc.get('ratio', 9)}:"
+                          f"attack={sc.get('attack', 15)}:release={sc.get('release', 350)}:makeup=1[musd]")
             mix = ["[voice1]", "[musd]"]
         else:
             mix.append("[mus]")
