@@ -175,8 +175,33 @@ def resolve_env():
     return api, lib
 
 
+def find_resolve_python():
+    """Another installed Python that can load Resolve's fusionscript (Windows `py` launcher), as an argv prefix, or None.
+
+    Measured on this PC (Resolve Studio 21.0.3.7): the Microsoft-Store Python 3.10 fails with 'SystemError: initialization of
+    fusionscript failed without raising an exception' while Python 3.13 connects. Resolve's module is picky about the
+    interpreter, so Resolve-facing scripts fall back to one that works."""
+    api, lib = resolve_env()
+    code = ("import os,sys;os.environ['RESOLVE_SCRIPT_API']=r'%s';os.environ['RESOLVE_SCRIPT_LIB']=r'%s';"
+            "sys.path.append(os.path.join(r'%s','Modules'));import DaVinciResolveScript;print('OK')" % (api, lib, api))
+    cands = [[sys.executable]] + [["py", f"-3.{v}"] for v in (13, 12, 11, 10)] if os.name == "nt" else [[sys.executable]]
+    for c in cands:
+        if c == [sys.executable] and getattr(sys, "_hf_resolve_failed", False):
+            continue
+        try:
+            r = subprocess.run(c + ["-c", code], capture_output=True, text=True, timeout=60)
+            if "OK" in r.stdout:
+                return c
+        except Exception:  # noqa: BLE001
+            continue
+    return None
+
+
 def connect_resolve():
-    """Return the Resolve scripting object, or raise RuntimeError with a fix hint."""
+    """Return the Resolve scripting object, or raise RuntimeError with a fix hint.
+
+    If the current interpreter cannot load fusionscript (SystemError) and another installed Python can, the CURRENT SCRIPT is
+    re-run with that Python (once, guarded by HF_RESOLVE_REEXEC) and this process exits with its exit code."""
     api, lib = resolve_env()
     os.environ["RESOLVE_SCRIPT_API"] = api
     os.environ["RESOLVE_SCRIPT_LIB"] = lib
@@ -185,6 +210,15 @@ def connect_resolve():
         sys.path.append(mod)
     try:
         import DaVinciResolveScript as dvr  # type: ignore
+    except SystemError as e:
+        sys._hf_resolve_failed = True
+        if not os.environ.get("HF_RESOLVE_REEXEC"):
+            alt = find_resolve_python()
+            if alt and alt != [sys.executable]:
+                env = dict(os.environ, HF_RESOLVE_REEXEC="1")
+                sys.exit(subprocess.run(alt + [os.path.abspath(sys.argv[0])] + sys.argv[1:], env=env).returncode)
+        raise RuntimeError(f"fusionscript would not initialise under this Python ({sys.version.split()[0]}): {e}. "
+                           "Install another Python (3.11-3.13, python.org) and retry; the `py` launcher is tried automatically.")
     except Exception as e:  # noqa: BLE001
         raise RuntimeError(f"Cannot import DaVinciResolveScript from {mod}: {e}. "
                            "Is DaVinci Resolve Studio installed? Check RESOLVE_SCRIPT_API.")

@@ -8,6 +8,7 @@ Fallback behaviour when something is missing is described in SKILL.md ("When too
 """
 import argparse
 import json
+import os
 import platform
 import re
 import shutil
@@ -105,17 +106,36 @@ def main():
         f"api={'ok' if api_ok else 'missing'} lib={'ok' if lib_ok else 'missing'} ({platform.system()})",
         "" if api_ok and lib_ok else "Install DaVinci Resolve Studio, or set RESOLVE_SCRIPT_API / RESOLVE_SCRIPT_LIB")
     if not a.no_resolve and api_ok and lib_ok:
+        os.environ["HF_RESOLVE_REEXEC"] = "1"  # preflight reports; it must not re-run itself under another Python
+        info, via, err = None, "", None
         try:
             r = connect_resolve()
-            prod, ver = r.GetProductName(), r.GetVersionString()
-            studio = "studio" in (prod or "").lower()
-            add("resolve connection", "PASS" if studio else "FAIL", f"{prod} {ver}",
-                "" if studio else "Free edition cannot be scripted externally (Resolve 21.1+). Use Studio.")
-            proj = r.GetProjectManager().GetCurrentProject()
-            add("resolve project", "PASS" if proj else "WARN", proj.GetName() if proj else "no project open",
-                "" if proj else "Open or create a project (never rely on the untitled default project)")
+            pj = r.GetProjectManager().GetCurrentProject()
+            info = {"product": r.GetProductName(), "version": r.GetVersionString(), "project": pj.GetName() if pj else None}
+        except RuntimeError as e0:
+            err = e0
+            if "would not initialise" in str(e0):
+                from common import find_resolve_python
+                alt = find_resolve_python()
+                if alt:
+                    try:
+                        p = subprocess.run(alt + [str(Path(__file__).parent / "resolve_build.py"), "probe"], capture_output=True,
+                                           text=True, timeout=90)
+                        info = json.loads(p.stdout)
+                        via = (f" via `{' '.join(alt)}` (this Python {sys.version.split()[0]} cannot load fusionscript; "
+                               "Resolve scripts re-run themselves with it automatically)")
+                    except Exception as e1:  # noqa: BLE001
+                        err = e1
         except Exception as e:  # noqa: BLE001
-            add("resolve connection", "FAIL", str(e).splitlines()[0][:200],
+            err = e
+        if info:
+            studio = "studio" in (info.get("product") or "").lower()
+            add("resolve connection", "PASS" if studio else "FAIL", f"{info.get('product')} {info.get('version')}{via}",
+                "" if studio else "Free edition cannot be scripted externally (Resolve 21.1+). Use Studio.")
+            add("resolve project", "PASS" if info.get("project") else "WARN", str(info.get("project") or "no project open"),
+                "" if info.get("project") else "Open or create a project (never rely on the untitled default project)")
+        else:
+            add("resolve connection", "FAIL", str(err).splitlines()[0][:200],
                 "Open Resolve Studio; Preferences > System > General > External scripting using = Local")
 
     # MCP registration (best effort)

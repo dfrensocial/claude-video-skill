@@ -212,6 +212,34 @@ def build_audio(spec, tmpdir, total):
     return cmd, raw
 
 
+def render_music_stem(spec, out_wav):
+    """Only the music, already gained and ducked under this spec's voice, as a WAV: for editable timelines (Resolve cannot set
+    audio gain or run sidechain ducking from a script, so the stem is prepared here and placed as an ordinary audio clip)."""
+    music = spec.get("music")
+    if not music or not music.get("file"):
+        return None
+    total = total_duration(spec)
+    cmd = ["ffmpeg", "-y", "-v", "error"]
+    chains = []
+    n = len(spec["clips"])
+    for i, c in enumerate(spec["clips"]):
+        d = float(c["out"]) - float(c["in"])
+        cmd += ["-ss", f"{float(c['in']):.3f}", "-t", f"{d:.3f}", "-i", c["src"]]
+        chains.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo[a{i}]")
+    chains.append("".join(f"[a{i}]" for i in range(n)) + f"concat=n={n}:v=0:a=1[voice]")
+    cmd += ["-stream_loop", "-1", "-i", music["file"]]
+    fo = float(music.get("fade_out", 1.0))
+    chains.append(f"[{n}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{total:.3f},asetpts=PTS-STARTPTS,"
+                  f"volume={float(music.get('gain_db', -20))}dB,afade=t=out:st={max(total - fo, 0):.3f}:d={fo}[mus]")
+    if music.get("duck", True):
+        chains.append("[mus][voice]sidechaincompress=threshold=0.04:ratio=9:attack=15:release=350:makeup=1[out]")
+    else:
+        chains.append("[mus]anull[out]")
+    cmd += ["-filter_complex", ";".join(chains), "-map", "[out]", "-c:a", "pcm_s16le", str(out_wav)]
+    sh(cmd)
+    return str(out_wav)
+
+
 def loudnorm_two_pass(raw, out, lufs, tp=-1.5, lra=11):
     r = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(raw), "-af",
                         f"loudnorm=I={lufs}:TP={tp}:LRA={lra}:print_format=json", "-f", "null", "-"], capture_output=True, text=True)

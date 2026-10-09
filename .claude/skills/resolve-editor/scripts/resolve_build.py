@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Deterministic DaVinci Resolve Studio builder (external scripting API). Works WITHOUT any MCP server.
 
-  *** NOT YET RUN AGAINST A LIVE RESOLVE. The logic is tested against a mock only (see --mock). ***
-  *** First run in a scratch project. Use `verify` after every `build`; trust its report over this code. ***
+  *** LIVE-TESTED (2026-10-09) on Resolve Studio 21.0.3.7: build + verify pass; clipInfo endFrame is EXCLUSIVE there, so the
+  *** default --end-offset is 0. Other commands (place, markers, render) are still mock-tested only: use a scratch project
+  *** and `verify` after every `build`; trust its report over this code. ***
 
   resolve_build.py probe
   resolve_build.py build   --plan cut_plan.json --project "Dfren - NAME" [--timeline "Cut v1"] [--bin "RAW/NAME"]
                            [--fps 30] [--width 1080] [--height 1920] [--end-offset -1]
   resolve_build.py verify  --plan cut_plan.json [--timeline "Cut v1"] [--end-offset -1]
+  resolve_build.py from-spec --spec jobs/NAME/spec.json --project "Dfren - NAME" [--timeline "Cut v1"]   (compose.py spec -> editable timeline)
+  resolve_build.py grade   --grade grade.json [--lut X.cube] [--timeline "Cut v1"]       (SetCDL + SetLUT on node 1)
   resolve_build.py place   --placements placements.json [--timeline "Cut v1"] [--workdir jobs/NAME/clips]
   resolve_build.py markers --file markers.json [--timeline "Cut v1"]
   resolve_build.py render  --out DIR --name NAME [--timeline "Cut v1"] [--preview] [--width W --height H]
@@ -15,11 +18,15 @@
   Add --mock to any command to run against an in-memory fake (for logic tests only).
 
 placements.json:  {"items":[{"kind":"broll|sfx|music|clip","path":"/abs/file","tl_start":12.4,"duration":2.2,
-                             "src_start":0.0,"track":2,"gain_db":-12}]}      # track = video track (broll/clip) or audio track
+                             "src_start":0.0,"track":2,"gain_db":-12,
+                             "blend":"normal|screen|multiply|add|chroma-key","opacity":0.9,"width_frac":0.5,"y":400}]}
+                  # track = video track (broll/clip) or audio track; gain_db is pre-applied with ffmpeg (Resolve audio gain is
+                  # not scriptable); chroma-key is pre-keyed to alpha with ffmpeg; blend/opacity/zoom/tilt are set on the item.
 markers.json:     {"markers":[{"tl_sec":3.2,"color":"Blue","name":"B-roll: tea pour","note":"","dur_sec":0}]}
 
-Frame arithmetic: source frames = round(seconds * source_fps). Resolve's clipInfo endFrame is treated as INCLUSIVE
-by default (--end-offset -1). If `verify` reports every clip long/short by one frame, flip --end-offset to 0.
+Frame arithmetic: source frames = round(seconds * source_fps). Measured on Resolve Studio 21.0.3.7: clipInfo endFrame is
+EXCLUSIVE (default --end-offset 0). On another Resolve version, if `verify` reports every clip long/short by one frame,
+flip --end-offset to -1.
 """
 import argparse
 import json
@@ -405,6 +412,64 @@ def cmd_verify(a):
     sys.exit(0 if not problems else 1)
 
 
+BLEND_CONST = {"normal": "COMPOSITE_NORMAL", "screen": "COMPOSITE_SCREEN", "multiply": "COMPOSITE_MULTIPLY", "add": "COMPOSITE_ADD"}
+LUT_DIRS = [r"C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\LUT",
+            "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT", "/opt/resolve/LUT"]
+
+
+def prekey(path, workdir, key=None):
+    """Green screen -> ProRes 4444 with alpha (Resolve's keyers are not scriptable here), so it can be placed as 'normal'."""
+    key = key or {}
+    wd = Path(workdir or ".") / "keyed"
+    wd.mkdir(parents=True, exist_ok=True)
+    out = wd / f"{Path(path).stem}_keyed.mov"
+    if not out.exists():
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", path, "-vf",
+                        f"chromakey={key.get('color', '0x00ff00')}:{key.get('similarity', 0.28)}:{key.get('blend', 0.1)},format=yuva444p10le",
+                        "-c:v", "prores_ks", "-profile:v", "4444", "-pix_fmt", "yuva444p10le", "-an", str(out)], check=True)
+    return str(out)
+
+
+def display_zoom(mi, tl_w, tl_h, width_frac=None, cover=False):
+    """Zoom factor for a clip given Resolve's default 'scale to fit'. width_frac: desired width as a fraction of the timeline;
+    cover: fill the whole frame (crop the overflow)."""
+    try:
+        cw, ch = [float(x) for x in str(mi.GetClipProperty("Resolution")).lower().split("x")]
+    except Exception:  # noqa: BLE001
+        return None
+    fit = min(tl_w / cw, tl_h / ch)
+    if width_frac:
+        return max(0.01, (width_frac * tl_w) / (cw * fit))
+    if cover:
+        return max(tl_w / cw, tl_h / ch) / fit
+    return 1.0
+
+
+def apply_item_props(resolve, tl_item, spec_item, mi, tl_w, tl_h):
+    """Composite mode, opacity, scale, position on a placed video item. Returns a list of what was set / what failed."""
+    done = []
+    blend = spec_item.get("blend", "normal")
+    const = getattr(resolve, BLEND_CONST.get(blend, "COMPOSITE_NORMAL"), None)
+    if const is not None and blend != "normal":
+        done.append(f"composite {blend}: {tl_item.SetProperty('CompositeMode', const)}")
+    if spec_item.get("opacity") is not None and float(spec_item["opacity"]) < 0.999:
+        done.append(f"opacity {spec_item['opacity']}: {tl_item.SetProperty('Opacity', float(spec_item['opacity']) * 100.0)}")
+    cover = blend in ("screen", "multiply", "add") and not spec_item.get("width_frac")
+    z = display_zoom(mi, tl_w, tl_h, spec_item.get("width_frac") if float(spec_item.get("width_frac") or 1) < 0.999 else None, cover)
+    if z and abs(z - 1.0) > 0.01:
+        done.append(f"zoom {z:.3f}: {tl_item.SetProperty('ZoomX', z) and tl_item.SetProperty('ZoomY', z)}")
+    if isinstance(spec_item.get("y"), (int, float)):
+        # y = top edge in px of the displayed overlay; Resolve Tilt is positive upward from the centre
+        try:
+            ch = float(str(mi.GetClipProperty("Resolution")).lower().split("x")[1])
+            cw = float(str(mi.GetClipProperty("Resolution")).lower().split("x")[0])
+            h_disp = ch * min(tl_w / cw, tl_h / ch) * (z or 1.0)
+            done.append(f"tilt: {tl_item.SetProperty('Tilt', (tl_h / 2.0) - (float(spec_item['y']) + h_disp / 2.0))}")
+        except Exception:  # noqa: BLE001
+            pass
+    return done
+
+
 def cmd_place(a):
     data = json.load(open(a.placements, encoding="utf-8"))
     r = get_resolve(a.mock)
@@ -413,10 +478,16 @@ def cmd_place(a):
     pool = proj.GetMediaPool()
     cache = {}
     tfps = float(proj.GetSetting("timelineFrameRate") or 30)
+    tl_w = float(proj.GetSetting("timelineResolutionWidth") or 1080)
+    tl_h = float(proj.GetSetting("timelineResolutionHeight") or 1920)
     start0 = tl.GetStartFrame()
-    infos, report = [], []
+    infos, report, mis = [], [], []
     for k, it in enumerate(data["items"]):
         path = it["path"]
+        if it.get("blend") == "chroma-key" and not a.mock:
+            path = prekey(path, a.workdir, it.get("key"))
+            it = dict(it, blend="normal")
+            data["items"][k] = it
         if it.get("gain_db") and not a.mock:
             wd = Path(a.workdir or ".") / "gained"
             wd.mkdir(parents=True, exist_ok=True)
@@ -436,13 +507,137 @@ def cmd_place(a):
         info = {"mediaPoolItem": mi, "startFrame": sf, "endFrame": ef, "trackIndex": track,
                 "recordFrame": start0 + int(round(it["tl_start"] * tfps)), "mediaType": 2 if is_audio else 1}
         infos.append(info)
+        mis.append(mi)
         report.append(f"{it['kind']} {Path(path).name} @ {it['tl_start']}s on {kind[0].upper()}{track}")
     placed = pool.AppendToTimeline(infos)
     print(f"placed {len(placed or [])}/{len(infos)}")
     for line in report:
         print(" -", line)
-    if len(placed or []) != len(infos):
+    if len(placed or []) != len(infos) or any(p is None for p in placed or []):
         raise SystemExit("some items were not placed - re-run verify / inspect the timeline")
+    if not a.mock:
+        for tli, it, mi in zip(placed, data["items"], mis):
+            if it["kind"] in ("sfx", "music"):
+                continue
+            for line in apply_item_props(r, tli, it, mi, tl_w, tl_h):
+                print("   ", line)
+
+
+def lut_install(lut_path):
+    """Copy a .cube into Resolve's LUT folder (subfolder Dfren) and return the relative name Resolve's SetLUT expects."""
+    src = Path(lut_path)
+    for d in LUT_DIRS:
+        if Path(d).is_dir():
+            dst = Path(d) / "Dfren"
+            dst.mkdir(exist_ok=True)
+            if not (dst / src.name).exists():
+                import shutil
+                shutil.copy(src, dst / src.name)
+            return "Dfren\\" + src.name if "\\" in d else "Dfren/" + src.name
+    raise SystemExit("could not find Resolve's LUT folder")
+
+
+def apply_grade(resolve, proj, tl, grade, track=1):
+    """CDL (node 1) and an optional LUT (node 1) on every clip of a video track. Returns a report list."""
+    out = []
+    items = tl.GetItemListInTrack("video", track) or []
+    lut_rel = None
+    if grade.get("lut"):
+        lut_rel = lut_install(grade["lut"])
+        out.append(f"RefreshLUTList: {proj.RefreshLUTList()}")
+    cdl = grade.get("cdl")
+    for it in items:
+        if cdl:
+            c = {"NodeIndex": "1", "Slope": str(cdl["Slope"]), "Offset": str(cdl["Offset"]), "Power": str(cdl["Power"]),
+                 "Saturation": str(cdl["Saturation"])}
+            out.append(f"{it.GetName()}: SetCDL {it.SetCDL(c)}")
+        if lut_rel:
+            g = it.GetNodeGraph()
+            ok = g.SetLUT(1, lut_rel)
+            out.append(f"{it.GetName()}: SetLUT {ok} readback={g.GetLUT(1)!r}")
+    return out
+
+
+def cmd_grade(a):
+    r = get_resolve(a.mock)
+    proj = r.GetProjectManager().GetCurrentProject()
+    tl = current_or_named(proj, a.timeline)
+    g = json.load(open(a.grade, encoding="utf-8"))
+    grade = {"cdl": (g.get("suggest") or {}).get("cdl") or g.get("cdl"), "lut": a.lut or g.get("lut")}
+    for line in apply_grade(r, proj, tl, grade, a.track):
+        print(line)
+
+
+def cmd_from_spec(a):
+    """Build the compose.py edit spec as an editable Resolve timeline: cuts, grade, overlays (blend/opacity/zoom), caption
+    overlay, SFX, and the ducked music stem. Same decisions as the ffmpeg render, but every clip stays movable in Resolve."""
+    import tempfile
+    from types import SimpleNamespace as NS
+    spec = json.load(open(a.spec, encoding="utf-8"))
+    out_dir = Path(a.workdir or Path(a.spec).parent)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    o = spec.get("output", {})
+    w, h, fps = int(o.get("w", 1080)), int(o.get("h", 1920)), float(o.get("fps", 30))
+    clips = spec["clips"]
+    plan = {"files": sorted({c["src"] for c in clips}),
+            "keep": [{"file": c["src"], "start": c["in"], "end": c["out"]} for c in clips],
+            "timeline_duration": sum(c["out"] - c["in"] for c in clips)}
+    pj = out_dir / "_resolve_plan.json"
+    pj.write_text(json.dumps(plan), encoding="utf-8")
+    cmd_build(NS(plan=str(pj), project=a.project, timeline=a.timeline, bin=a.bin, fps=fps, width=w, height=h,
+                 end_offset=a.end_offset, mock=a.mock))
+    r = get_resolve(a.mock)
+    proj = r.GetProjectManager().GetCurrentProject()
+    tl = proj.GetCurrentTimeline()
+    total = plan["timeline_duration"]
+    if spec.get("grade") and not a.mock:
+        for line in apply_grade(r, proj, tl, spec["grade"]):
+            print("grade:", line)
+    items, track_end = [], {}
+
+    def free_track(start, end):
+        t = 2
+        while track_end.get(t, -1) > start + 0.01:
+            t += 1
+        track_end[t] = end
+        return t
+
+    for ov in spec.get("overlays", []):
+        try:
+            dur = float(ov.get("dur") or probe_summary(ov["file"])["duration"])
+        except Exception:  # noqa: BLE001
+            dur = float(ov.get("dur") or 2.0)
+        s = float(ov.get("start", 0))
+        items.append(dict(ov, kind="clip", path=ov["file"], tl_start=s, duration=dur, track=free_track(s, s + dur)))
+    if spec.get("captions"):
+        try:
+            from captions_ass import overlay as cap_overlay
+            mov = out_dir / "captions_overlay.mov"
+            if not mov.exists() or a.force:
+                cap_overlay(spec["captions"], str(mov), total, w, h, int(round(fps)))
+            items.append({"kind": "clip", "path": str(mov), "tl_start": 0, "duration": total, "track": free_track(0, total),
+                          "blend": "normal"})
+        except Exception as e:  # noqa: BLE001
+            print(f"[warn] caption overlay not placed: {e}")
+    if spec.get("music"):
+        try:
+            from compose import render_music_stem
+            stem = render_music_stem(spec, out_dir / "music_stem.wav")
+            items.append({"kind": "music", "path": stem, "tl_start": 0, "duration": total, "track": 3})
+        except Exception as e:  # noqa: BLE001
+            print(f"[warn] music stem not placed: {e}")
+    for s in spec.get("sfx", []):
+        try:
+            d = float(probe_summary(s["file"])["duration"])
+        except Exception:  # noqa: BLE001
+            d = 1.0
+        items.append({"kind": "sfx", "path": s["file"], "tl_start": float(s["at"]), "duration": d, "track": 2,
+                      "gain_db": s.get("gain_db", -12)})
+    if items:
+        pf = out_dir / "_resolve_placements.json"
+        pf.write_text(json.dumps({"items": items}), encoding="utf-8")
+        cmd_place(NS(placements=str(pf), timeline=None, workdir=str(out_dir), end_offset=a.end_offset, mock=a.mock))
+    print(f"from-spec done: {len(plan['keep'])} cut(s), {len(items)} extra item(s) on timeline '{tl.GetName()}'")
 
 
 def cmd_markers(a):
@@ -507,16 +702,29 @@ def main():
     p.add_argument("--fps", type=float, default=30)
     p.add_argument("--width", type=int, default=1080)
     p.add_argument("--height", type=int, default=1920)
-    p.add_argument("--end-offset", type=int, default=-1)
+    p.add_argument("--end-offset", type=int, default=0)
     p = sub.add_parser("verify")
     p.add_argument("--plan", required=True)
     p.add_argument("--timeline")
-    p.add_argument("--end-offset", type=int, default=-1)
+    p.add_argument("--end-offset", type=int, default=0)
     p = sub.add_parser("place")
     p.add_argument("--placements", required=True)
     p.add_argument("--timeline")
     p.add_argument("--workdir")
-    p.add_argument("--end-offset", type=int, default=-1)
+    p.add_argument("--end-offset", type=int, default=0)
+    p = sub.add_parser("grade")
+    p.add_argument("--grade", required=True, help="grade.json from grade.py analyze (uses suggest.cdl) or {cdl, lut}")
+    p.add_argument("--lut", help="optional .cube applied on node 1 after the CDL")
+    p.add_argument("--timeline")
+    p.add_argument("--track", type=int, default=1)
+    p = sub.add_parser("from-spec")
+    p.add_argument("--spec", required=True, help="compose.py edit spec (jobs/NAME/spec.json)")
+    p.add_argument("--project", required=True)
+    p.add_argument("--timeline")
+    p.add_argument("--bin")
+    p.add_argument("--workdir")
+    p.add_argument("--end-offset", type=int, default=0)
+    p.add_argument("--force", action="store_true")
     p = sub.add_parser("markers")
     p.add_argument("--file", required=True)
     p.add_argument("--timeline")
@@ -534,7 +742,7 @@ def main():
     # allow --mock after the subcommand too
     if "--mock" in rest:
         a.mock = True
-    globals()["cmd_" + a.cmd](a)
+    globals()["cmd_" + a.cmd.replace("-", "_")](a)
 
 
 if __name__ == "__main__":
