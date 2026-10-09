@@ -10,4 +10,8 @@ Standing rules: autopilot unless told otherwise; never modify originals; duplica
 - Resolve version / scripting status: (unknown - run preflight)
 - endFrame inclusive or exclusive: (unknown - first `verify` tells you)
 - Whisper model / Tamil quality: (unknown)
-- HyperFrames installed: no
+- HyperFrames installed: yes (npx hyperframes doctor OK, v0.8.143; optional whisper-cpp/Kokoro/MusicGen/Docker absent)
+- Machine (2026-10-09): Windows 11, Python 3.10.11 (use `python`, not `python3`), ffmpeg 7.1, Node 24; faster-whisper 1.2.1 + numpy installed.
+- Resolve scripting files present, but connection failed because Resolve was not running. Re-run preflight with Resolve Studio open.
+- Resolve MCP: not set up yet (needs Resolve running).
+- Library paths in workspace.json: not set yet (waiting on user).
